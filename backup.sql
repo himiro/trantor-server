@@ -1,0 +1,83 @@
+-- MySQL dump 10.13  Distrib 5.7.23, for Linux (x86_64)
+--
+-- Host: localhost    Database: zappy
+-- ------------------------------------------------------
+-- Server version	5.7.23-0ubuntu0.18.04.1
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `matches`
+--
+
+DROP TABLE IF EXISTS `matches`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `matches` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_team1` int(11) NOT NULL,
+  `id_team2` int(11) NOT NULL,
+  `start` datetime NOT NULL,
+  `end` datetime NOT NULL,
+  `winner` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_team1` (`id_team1`),
+  KEY `id_team2` (`id_team2`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `matches`
+--
+
+LOCK TABLES `matches` WRITE;
+/*!40000 ALTER TABLE `matches` DISABLE KEYS */;
+INSERT INTO `matches` VALUES (1,1,5,'2011-04-25 00:00:00','2011-04-25 00:00:00',1),(2,1,5,'2012-03-24 00:00:00','2012-03-24 00:00:00',1),(3,1,5,'2011-08-22 00:00:00','2011-08-22 00:00:00',1),(4,1,5,'2010-07-10 00:00:00','2010-07-10 00:00:00',1),(5,1,2,'2018-09-06 12:23:03','2018-09-06 13:00:00',1),(6,12,3,'2018-09-06 12:23:03','2018-09-06 13:00:00',2),(7,15,14,'2018-09-06 12:23:03','2018-09-06 13:00:00',0),(8,2,13,'2018-09-06 12:23:03','2018-09-06 13:00:00',0),(9,14,3,'2018-09-06 12:23:03','2018-09-06 13:00:00',1),(10,15,3,'2018-09-06 12:23:03','2018-09-06 13:00:00',2),(11,16,13,'2018-09-06 12:23:03','2018-09-06 13:00:00',2),(12,15,14,'2018-09-06 12:23:03','2018-09-06 13:00:00',2),(13,10,8,'2018-09-06 12:23:03','2018-09-06 13:00:00',2),(14,7,8,'2018-09-06 12:23:03','2018-09-06 13:00:00',2),(15,2,8,'2018-09-06 12:23:03','2018-09-06 13:00:00',2),(16,2,16,'2018-09-06 12:23:03','2018-09-06 13:00:00',2),(17,11,16,'2018-09-06 12:23:03','2018-09-06 13:00:00',2),(18,11,2,'2018-09-06 12:23:03','2018-09-06 13:00:00',2),(19,2,14,'2018-09-06 12:23:03','2018-09-06 13:00:00',1);
+/*!40000 ALTER TABLE `matches` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `teams`
+--
+
+DROP TABLE IF EXISTS `teams`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `teams` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `skill_mu` float NOT NULL,
+  `skill_sigma` float NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `teams`
+--
+
+LOCK TABLES `teams` WRITE;
+/*!40000 ALTER TABLE `teams` DISABLE KEYS */;
+INSERT INTO `teams` VALUES (1,'Team1',25.4292,8.58333),(2,'Team2',24.9142,8.58333),(3,'Team3',24.9142,8.58333),(4,'Team4',25,8.33333),(5,'Team5',24.5708,8.58333),(6,'Team6',23,8.33333),(7,'Team7',24.7425,8.58333),(8,'Team8',25.2575,8.58333),(9,'Team9',25,8.33333),(10,'Team10',24.7425,8.58333),(11,'Team11',24.9142,8.58333),(12,'Team12',24.9142,8.58333),(13,'Team13',25.0858,8.58333),(14,'Team14',25.0858,8.58333),(15,'Team15',24.9142,8.58333),(16,'Team16',25.0858,8.58333),(17,'Team17',25,8.33333),(18,'Team18',25,8.33333),(19,'Team19',30,10),(20,'Team20',21,14),(21,'Team21',24.67,9.33333);
+/*!40000 ALTER TABLE `teams` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2018-10-20 13:12:52

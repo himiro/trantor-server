@@ -1,0 +1,5 @@
+FOR MYSQL DATABASE :
+  Create user "trantor" with the password "trantor"
+  Create database called "trantor"
+  sudo mysql trantor < backup.sql
+  Check if the tables are well formated and if they are not empty
