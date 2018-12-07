@@ -4,7 +4,7 @@ class Controller
 {
   protected Timeline timeline;
   protected WorldMap worldMap;
-  protected List<Team> teams = new ArrayList<Team>();
+  protected Map<String, Team> teams = new HashMap<String, Team>();
   protected int maxPlayerPerTeam;
 
   Controller()
@@ -54,7 +54,7 @@ class Controller
   * Returns value of teams
   * @return
   */
-  public List<Team> getTeams()
+  public Map<String, Team> getTeams()
   {
     return this.teams;
   }
@@ -63,7 +63,7 @@ class Controller
   * Sets new value of teams
   * @param
   */
-  public void setTeams(List<Team> teams)
+  public void setTeams(Map<String, Team> teams)
   {
     this.teams = teams;
   }
@@ -93,22 +93,23 @@ class Controller
     System.out.println("Map initialisation");
   }
 
-  public void addCommand()
+  public void addCommand(String command, String teamName, int socketPlayer)
   {
     //If player's stack !empty : add command to the player.
     //Else : add command to the timeline
-    System.out.println("New command in the player stack");
+    System.out.println("New command in the player' stack");
   }
 
-  public void removeCommand()
+  //Normalement pas utilisée
+  public void removeCommand(String command)
   {
-    //If player's stack !empty : add command to the player.
-    //Else : add command to the timeline
-    System.out.println("Command removed from the player's stack");
+    //remove from Timeline
+    System.out.println("Command removed from the player' stack");
   }
 
-  public void newTeam()
+  public void newTeam(String teamName)
   {
+    //create new team
     System.out.println("New team");
   }
 
@@ -122,15 +123,4 @@ class Controller
   {
     System.out.println("Save result in SQL");
   }
-
-  public void addCommandToPlayer()
-  {
-    System.out.println("Add command to player stack");
-  }
-
-  public void removeCommmandFromPlayer()
-  {
-    System.out.println("Remove command from player stack");
-  }
-
 }

@@ -15,12 +15,11 @@ class Player extends Character
   protected int vision;
   protected List<Ressource> inventory = new ArrayList<Ressource>();
   protected static int id = 0;
-  //stack
   protected Stack<String> stack = new Stack<String>();
 
   Player(int x, int y, int idSocket, String teamName, Orientation orientation /*ENUM*/, List<Ressource> inventory)
   {
-    super(x, y, teamName, "Alive", idSocket);
+    super(x, y, teamName, Status.ALIVE, idSocket);
     this.orientation = orientation;
     this.level = 0;
     this.vision = 1;

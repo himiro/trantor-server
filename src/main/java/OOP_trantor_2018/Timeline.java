@@ -34,13 +34,15 @@ class Timeline extends TimeManagement
   public void addCommand(Command command)
   {
     //add command in the timeline + define endTime
-    // + remove it from player's stack if stack !empty
+    // + if stack !empty -> remove it from player's stack
     System.out.println("Add command");
   }
 
   public void removeCommand(Command command)
   {
+    //if action finished
     //remove the command from the timeline and check if another command is waiting in the player's stack
+    // if yes -> addCommand from player
     System.out.println("Remove command");
   }
 
