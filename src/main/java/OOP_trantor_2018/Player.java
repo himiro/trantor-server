@@ -2,8 +2,15 @@ import java.util.*;
 
 class Player extends Character
 {
-  //Enum orientation;
-  protected String orientation;
+  public enum Orientation
+  {
+    NORTH,
+    SOUTH,
+    EAST,
+    WEST
+  }
+
+  protected Orientation orientation;
   protected int level;
   protected int vision;
   protected List<Ressource> inventory = new ArrayList<Ressource>();
@@ -11,7 +18,7 @@ class Player extends Character
   //stack
   protected Stack<String> stack = new Stack<String>();
 
-  Player(int x, int y, int idSocket, String teamName, String orientation /*ENUM*/, List<Ressource> inventory)
+  Player(int x, int y, int idSocket, String teamName, Orientation orientation /*ENUM*/, List<Ressource> inventory)
   {
     super(x, y, teamName, "Alive", idSocket);
     this.orientation = orientation;
@@ -35,7 +42,7 @@ class Player extends Character
   * Returns value of orientation
   * @return
   */
-  public String getOrientation()
+  public Orientation getOrientation()
   {
     return this.orientation;
   }
@@ -44,7 +51,7 @@ class Player extends Character
   * Sets new value of orientation
   * @param
   */
-  public void setOrientation(String orientation)
+  public void setOrientation(Orientation orientation)
   {
     this.orientation = orientation;
   }

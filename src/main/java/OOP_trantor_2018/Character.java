@@ -1,13 +1,19 @@
 abstract class Character
 {
+  public enum Status
+  {
+    LAYED,
+    HATCHED,
+    ALIVE,
+    DEAD,
+  }
   protected int x;
   protected int y;
   protected long idSocket;
   protected String teamName;
-  //ENUM
-  protected String status;
+  protected Status status;
 
-  Character(int x, int y, String teamName, String status, long idSocket)
+  Character(int x, int y, String teamName, Status status, long idSocket)
   {
     this.x = x;
     this.y = y;
@@ -92,7 +98,7 @@ abstract class Character
   * Returns value of status
   * @return
   */
-  public String getStatus()
+  public Status getStatus()
   {
     return this.status;
   }
@@ -101,7 +107,7 @@ abstract class Character
   * Sets new value of status
   * @param
   */
-  public void setStatus(String status)
+  public void setStatus(Status status)
   {
     this.status = status;
   }
