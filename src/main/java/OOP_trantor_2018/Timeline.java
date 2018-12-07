@@ -2,19 +2,19 @@ import java.util.*;
 
 class Timeline
 {
-  protected Map<String, Date> commands = new HashMap<String, Date>();
+  protected Map<Command, Date> commands = new HashMap<Command, Date>();
 
   Timeline()
   {
 
   }
 
-  public Map<String, Date> getCommands()
+  public Map<Command, Date> getCommands()
   {
     return this.commands;
   }
 
-  public void setCommands(Map<String, Date> commands)
+  public void setCommands(Map<Command, Date> commands)
   {
     this.commands = commands;
   }
