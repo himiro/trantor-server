@@ -1,10 +1,12 @@
+import java.util.*;
+
 class Tile
 {
   protected int x;
   protected int y;
-  protected List<Ressource> ressources;
-  protected List<Player> players;
-  protected List<Egg> egg;
+  protected List<Ressource> ressources = new ArrayList();
+  protected List<Player> players = new ArrayList();
+  protected List<Egg> egg = new ArrayList();
 
 	public Tile(int x, int y, List<Ressource> ressources)
   {
@@ -70,23 +72,6 @@ class Tile
 	/**
 	* Returns value of players
 	* @return
-	/**
-	* Returns value of e
-	* @return
-	*/
-	public Til getE()
-	{
-		return this.e;
-	}
-
-	/**
-	* Sets new value of e
-	* @param
-	*/
-	public void setE(Til e)
-	{
-		this.e = e;
-	}
 	*/
 	public List<Player> getPlayers()
 	{

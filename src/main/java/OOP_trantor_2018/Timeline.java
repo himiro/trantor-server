@@ -2,7 +2,7 @@ import java.util.*;
 
 class Timeline
 {
-  protected Map<String, Date> commands = new Hashmap();
+  protected Map<String, Date> commands = new HashMap<String, Date>();
 
   Timeline()
   {

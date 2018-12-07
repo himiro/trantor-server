@@ -1,12 +1,12 @@
 import java.util.*;
 
-class Map
+class WorldMap
 {
   protected int sizeX;
   protected int sizeY;
   protected List<Tile> tiles = new ArrayList();
 
-  Map()
+  WorldMap()
   {
 
   }
@@ -26,7 +26,7 @@ class Map
     return this.sizeY;
   }
 
-  public void setSizeX(int sizeX)
+  public void setSizeY(int sizeX)
   {
     this.sizeX = sizeX;
   }
