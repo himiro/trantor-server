@@ -61,5 +61,4 @@ class Timeline extends TimeManagement
     COMMAND_TIME.put("Set", Integer.valueOf(7));
     COMMAND_TIME.put("Incantation", Integer.valueOf(300));
   }
-
 }

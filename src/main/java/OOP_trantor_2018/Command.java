@@ -4,14 +4,21 @@ class Command
 {
   protected String name;
   protected Date end;
-  protected long idPlayer;
+  protected Player player;
 
-  Command(String name, Date end, long idPlayer)
+  Command(String name, Date end, Player player)
   {
     this.name = name;
-    this.end = null;
-    this.idPlayer = idPlayer;
+    this.end = end;
+    this.player = player;
   }
+
+	Command(String name, Player player)
+	{
+		this.name = name;
+		this.end = null;
+		this.player = player;
+	}
 
 	/**
 	* Returns value of name
@@ -50,20 +57,20 @@ class Command
 	}
 
 	/**
-	* Returns value of idPlayer
+	* Returns value of player
 	* @return
 	*/
-	public long getIdPlayer()
+	public Player getPlayer()
 	{
-		return this.idPlayer;
+		return this.player;
 	}
 
 	/**
-	* Sets new value of idPlayer
+	* Sets new value of player
 	* @param
 	*/
-	public void setIdPlayer(long idPlayer)
+	public void setPlayer(Player player)
 	{
-		this.idPlayer = idPlayer;
+		this.player = player;
 	}
 }

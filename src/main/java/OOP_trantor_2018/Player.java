@@ -2,29 +2,28 @@ import java.util.*;
 
 class Player extends Character
 {
-  public enum Orientation
-  {
-    NORTH,
-    SOUTH,
-    EAST,
-    WEST
-  }
-
   protected Orientation orientation;
   protected int level;
   protected int vision;
   protected List<Ressource> inventory = new ArrayList<Ressource>();
-  protected static int id = 0;
+  protected static int nb = 1;
+  protected int id;
   protected Stack<String> stack = new Stack<String>();
 
-  Player(int x, int y, int idSocket, String teamName, Orientation orientation /*ENUM*/, List<Ressource> inventory)
+  //For debug
+  Player()
+  {
+    super(10, 10, "debug", Status.ALIVE, 42);
+  }
+
+  Player(int x, int y, int idSocket, String teamName, Orientation orientation, List<Ressource> inventory)
   {
     super(x, y, teamName, Status.ALIVE, idSocket);
     this.orientation = orientation;
     this.level = 0;
     this.vision = 1;
     this.inventory = inventory;
-    this.id++;
+    this.id = this.nb++;
     System.out.println("Player number " + this.id + " from socket " + this.idSocket + " has been created");
   }
 

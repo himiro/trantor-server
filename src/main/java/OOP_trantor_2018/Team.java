@@ -5,9 +5,9 @@ class Team
   protected String teamName;
   protected List<Player> players = new ArrayList<Player>();
 
-  Team()
+  Team(String teamName)
   {
-
+    this.teamName = teamName;
   }
 
   /**

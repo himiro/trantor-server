@@ -4,8 +4,16 @@ class Controller
 {
   protected Timeline timeline;
   protected WorldMap worldMap;
-  protected Map<String, Team> teams = new HashMap<String, Team>();
+  protected List<Team> teams = new ArrayList<Team>();
   protected int maxPlayerPerTeam;
+
+  //debug
+  Controller(List<Team> teams)
+  {
+    this.timeline = new Timeline();
+    this.initWorldMap();
+    this.teams = teams;
+  }
 
   Controller()
   {
@@ -54,7 +62,7 @@ class Controller
   * Returns value of teams
   * @return
   */
-  public Map<String, Team> getTeams()
+  public List<Team> getTeams()
   {
     return this.teams;
   }
@@ -63,7 +71,7 @@ class Controller
   * Sets new value of teams
   * @param
   */
-  public void setTeams(Map<String, Team> teams)
+  public void setTeams(List<Team> teams)
   {
     this.teams = teams;
   }
@@ -91,6 +99,13 @@ class Controller
     //Creation et initialisation de l'objet Map
     // /!\ Ne pas oublier d'initialiser chaque Tile de la Map
     System.out.println("World Map initialisation");
+  }
+
+  public void createCommand(String command, int socketId)
+  {
+    //create command object to add it to the timeline
+    Player tmp = this.findPlayerBySocketId(socketId);
+
   }
 
   public void addCommand(Command command)
@@ -122,5 +137,19 @@ class Controller
   public void saveResult()
   {
     System.out.println("Save result in SQL");
+  }
+
+  protected Player findPlayerBySocketId(int socketId)
+  {
+    System.out.println("findPlayerBySocketId() " + this.teams.size());
+    for (Team team : this.teams)
+    {
+      System.out.println("Enter in " + team.getTeamName() + " team");
+      for (Player player : team.getPlayers())
+      {
+        System.out.println("Player number " + player.getId() + " / " + player.getIdSocket());
+      }
+    }
+    return new Player();
   }
 }
