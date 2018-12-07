@@ -9,9 +9,16 @@ class Command
   Command(String name, Date end, Player player)
   {
     this.name = name;
-    this.end = null;
+    this.end = end;
     this.player = player;
   }
+
+	Command(String name, Player player)
+	{
+		this.name = name;
+		this.end = null;
+		this.player = player;
+	}
 
 	/**
 	* Returns value of name

@@ -90,10 +90,10 @@ class Controller
   {
     //Creation et initialisation de l'objet Map
     // /!\ Ne pas oublier d'initialiser chaque Tile de la Map
-    System.out.println("Map initialisation");
+    System.out.println("World Map initialisation");
   }
 
-  public void addCommand(String command, String teamName, int socketPlayer)
+  public void addCommand(Command command)
   {
     //If player's stack !empty : add command to the player.
     //Else : add command to the timeline
@@ -101,7 +101,7 @@ class Controller
   }
 
   //Normalement pas utilisée
-  public void removeCommand(String command)
+  public void removeCommand(Command command)
   {
     //remove from Timeline
     System.out.println("Command removed from the player' stack");
