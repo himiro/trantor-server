@@ -6,17 +6,29 @@ class Player extends Character
   protected String orientation;
   protected int level;
   protected int vision;
-  protected List<Ressource> inventory = new ArrayList();
+  protected List<Ressource> inventory = new ArrayList<Ressource>();
+  protected static int id = 0;
   //stack
-  protected Stack stack = new Stack();
+  protected Stack<String> stack = new Stack<String>();
 
-  Player(int x, int y, long id, String teamName, String orientation /*ENUM*/, List<Ressource> inventory)
+  Player(int x, int y, int idSocket, String teamName, String orientation /*ENUM*/, List<Ressource> inventory)
   {
-    super(x, y, id, teamName, "Alive");
+    super(x, y, teamName, "Alive", idSocket);
     this.orientation = orientation;
     this.level = 0;
     this.vision = 1;
     this.inventory = inventory;
+    this.id++;
+    System.out.println("Player number " + this.id + " from socket " + this.idSocket + " has been created");
+  }
+
+  /**
+  * Returns value of id
+  * @return
+  */
+  public int getId()
+  {
+    return this.id;
   }
 
   /**
@@ -104,7 +116,7 @@ class Player extends Character
   * Sets new value of stack
   * @param
   */
-  public void setStack(Stack stack)
+  public void setStack(Stack<String> stack)
   {
     this.stack = stack;
   }

@@ -1,7 +1,16 @@
 class Egg extends Character
 {
-  Egg(int x, int y, long id, String teamName, String status)
+  protected static int id = 0;
+
+  Egg(int x, int y, String teamName, String status, long idSocket)
   {
-    super(x, y, id, teamName, status);
+    super(x, y, teamName, status, idSocket);
+    this.id++;
+    System.out.println("Egg number " + this.id + " from socket " + this.idSocket + " has been created");
+  }
+
+  public int getId()
+  {
+    return this.id;
   }
 }

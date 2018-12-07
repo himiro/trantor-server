@@ -4,7 +4,7 @@ class WorldMap
 {
   protected int sizeX;
   protected int sizeY;
-  protected List<Tile> tiles = new ArrayList();
+  protected List<Tile> tiles = new ArrayList<Tile>();
 
   WorldMap()
   {

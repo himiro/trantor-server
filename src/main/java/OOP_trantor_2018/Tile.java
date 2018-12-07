@@ -4,9 +4,9 @@ class Tile
 {
   protected int x;
   protected int y;
-  protected List<Ressource> ressources = new ArrayList();
-  protected List<Player> players = new ArrayList();
-  protected List<Egg> egg = new ArrayList();
+  protected List<Ressource> ressources = new ArrayList<Ressource>();
+  protected List<Player> players = new ArrayList<Player>();
+  protected List<Egg> egg = new ArrayList<Egg>();
 
 	public Tile(int x, int y, List<Ressource> ressources)
   {

@@ -9,7 +9,7 @@ class Command
   Command(String name, Date end, long idPlayer)
   {
     this.name = name;
-    this.end = end;
+    this.end = null;
     this.idPlayer = idPlayer;
   }
 

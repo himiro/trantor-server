@@ -34,3 +34,8 @@ mainClassName = 'Trantor'
 tasks.withType(Jar){
   destinationDir = file("$rootDir/dist");
 }
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs << '-Xlint:unchecked'
+    options.deprecation = true
+}

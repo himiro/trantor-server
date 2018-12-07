@@ -2,15 +2,16 @@ abstract class Character
 {
   protected int x;
   protected int y;
-  protected long id;
+  protected long idSocket;
   protected String teamName;
   //ENUM
   protected String status;
 
-  Character(int x, int y, long id, String teamName, String status)
+  Character(int x, int y, String teamName, String status, long idSocket)
   {
     this.x = x;
     this.y = y;
+    this.idSocket = idSocket;
     this.teamName = teamName;
     this.status = status;
   }
@@ -55,18 +56,18 @@ abstract class Character
   * Returns value of id
   * @return
   */
-  public long getId()
+  public long getIdSocket()
   {
-    return this.id;
+    return this.idSocket;
   }
 
   /**
   * Sets new value of id
   * @param
   */
-  public void setId(long id)
+  public void setIdSocket(long idSocket)
   {
-    this.id = id;
+    this.idSocket = idSocket;
   }
 
   /**

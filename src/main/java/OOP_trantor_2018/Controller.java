@@ -3,14 +3,14 @@ import java.util.*;
 class Controller
 {
   protected Timeline timeline;
-  protected WorldMap map;
-  protected List<Team> teams = new ArrayList();
+  protected WorldMap worldMap;
+  protected List<Team> teams = new ArrayList<Team>();
   protected int maxPlayerPerTeam;
 
   Controller()
   {
     this.timeline = new Timeline();
-    this.initMap();
+    this.initWorldMap();
   }
 
 
@@ -36,18 +36,18 @@ class Controller
   * Returns value of map
   * @return
   */
-  public WorldMap getMap()
+  public WorldMap getWorldMap()
   {
-    return this.map;
+    return this.worldMap;
   }
 
   /**
   * Sets new value of map
   * @param
   */
-  public void setMap(WorldMap map)
+  public void setWorldMap(WorldMap worldMap)
   {
-    this.map = map;
+    this.worldMap = worldMap;
   }
 
   /**
@@ -86,21 +86,25 @@ class Controller
     this.maxPlayerPerTeam = maxPlayerPerTeam;
   }
 
-  public void initMap()
+  public void initWorldMap()
   {
     //Creation et initialisation de l'objet Map
     // /!\ Ne pas oublier d'initialiser chaque Tile de la Map
     System.out.println("Map initialisation");
   }
 
-  public void addCommandToTimeline()
+  public void addCommand()
   {
-    System.out.println("New command in the timeline");
+    //If player's stack !empty : add command to the player.
+    //Else : add command to the timeline
+    System.out.println("New command in the player stack");
   }
 
-  public void removeCommandFromTimeline()
+  public void removeCommand()
   {
-    System.out.println("Command removed in the timeline");
+    //If player's stack !empty : add command to the player.
+    //Else : add command to the timeline
+    System.out.println("Command removed from the player's stack");
   }
 
   public void newTeam()
