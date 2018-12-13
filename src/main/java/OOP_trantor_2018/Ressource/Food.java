@@ -2,7 +2,7 @@ class Food extends Ressource
 {
   Food()
   {
-    super("food", 0);
+    super("food", 10);
   }
 
   Food(int nb)

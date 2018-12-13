@@ -5,7 +5,7 @@ class Player extends Character
   protected Orientation orientation;
   protected int level;
   protected int vision;
-  protected List<Ressource> inventory = new ArrayList<Ressource>();
+  protected Map<String, Ressource> inventory = new HashMap<String, Ressource>();
   protected static int nb = 1;
   protected int id;
   protected Queue<Command> queue = new LinkedList<Command>();
@@ -16,7 +16,7 @@ class Player extends Character
     super(10, 10, "debug", Status.ALIVE, 42);
   }
 
-  Player(int x, int y, int idSocket, String teamName, Orientation orientation, List<Ressource> inventory)
+  Player(int x, int y, int idSocket, String teamName, Orientation orientation, Map<String, Ressource> inventory)
   {
     super(x, y, teamName, Status.ALIVE, idSocket);
     this.orientation = orientation;
@@ -94,7 +94,7 @@ class Player extends Character
   * Returns value of inventory
   * @return
   */
-  public List<Ressource> getInventory()
+  public Map<String, Ressource> getInventory()
   {
     return this.inventory;
   }
@@ -103,7 +103,7 @@ class Player extends Character
   * Sets new value of inventory
   * @param
   */
-  public void setInventory(List<Ressource> inventory)
+  public void setInventory(Map<String, Ressource> inventory)
   {
     this.inventory = inventory;
   }
@@ -209,12 +209,18 @@ class Player extends Character
       System.out.println("Player turn West");
       break;
     }
-    System.exit(0);
   }
 
   public void look()
   {
     System.out.println("Player looked around");
+  }
+
+  public void inventory()
+  {
+    System.out.println("food " + this.inventory.get("food").getNb() + ", linemate " + this.inventory.get("linemate").getNb() + ", deraumere " + this.inventory.get("deraumere").getNb() + ", sibur " + this.inventory.get("sibur").getNb()
+    + ", mendiane " + this.inventory.get("mendiane").getNb() + ", phiras " + this.inventory.get("phiras").getNb() + ", thystame " + this.inventory.get("thystame").getNb());
+    System.exit(0);
   }
 
   public void broadcast()

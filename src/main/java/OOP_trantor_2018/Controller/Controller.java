@@ -8,16 +8,16 @@ class Controller
     protected int maxPlayerPerTeam;
 
     //debug
-    Controller(List<Team> teams)
+    Controller(List<Team> teams, int frequence)
     {
-        this.timeline = new Timeline();
+        this.timeline = new Timeline(frequence);
         this.initWorldMap();
         this.teams = teams;
     }
 
-    Controller()
+    Controller(int frequence)
     {
-        this.timeline = new Timeline();
+        this.timeline = new Timeline(frequence);
         this.initWorldMap();
     }
 
@@ -128,25 +128,6 @@ class Controller
             if (command.getPlayer().getQueue().size() < 10)
             {
                 //System.out.println("Plus command");
-                Date endDate = new Date(System.currentTimeMillis());
-                if (command.getName().startsWith("Broadcast "))
-                {
-                    endDate = new Date(System.currentTimeMillis() + (this.timeline.getCommandTime().get(command.getName().substring(0, 9)) * 1000));
-                }
-                else if (command.getName().startsWith("Take "))
-                {
-                    endDate = new Date(System.currentTimeMillis() + (this.timeline.getCommandTime().get(command.getName().substring(0, 4)) * 1000));
-                }
-                else if (command.getName().startsWith("Set "))
-                {
-                    endDate = new Date(System.currentTimeMillis() + (this.timeline.getCommandTime().get(command.getName().substring(0, 3)) * 1000));
-                }
-                else
-                {
-                    endDate = new Date(System.currentTimeMillis() + (this.timeline.getCommandTime().get(command.getName()) * 1000));
-                }
-
-                command.setEnd(endDate);
                 command.getPlayer().getQueue().add(command);
             }
         }
@@ -170,24 +151,12 @@ class Controller
         if (command.getPlayer().getQueue().size() != 0)
         {
             this.pushCommandToTimeline(command.getPlayer().getQueue().peek());
-
-            /*System.out.println("\n\n\n");
-            System.out.println("TIMELINE : ");
-            this.getTimeline().getCommands().forEach(k->{
-                System.out.println(""+k.getName());
-            });
-            System.out.println("");
-            System.out.println("Player queue : ");
-            command.getPlayer().getQueue().forEach(k->{
-                System.out.println(""+k.getName());
-            });
-            System.out.println("\n\n\n");*/
         }
         else
         {
             System.out.println("Any command left");
+        }
     }
-}
 
     public void newTeam(String teamName)
     {
@@ -230,7 +199,7 @@ class Controller
         {
             if (tmp.equals(command))
             {
-                if (tmp.getEnd().getTime() > currentDate.getTime())
+                if (tmp.getEnd().getTime() < currentDate.getTime())
                 {
                     this.removeCommand(tmp);
                     return true;
@@ -240,6 +209,7 @@ class Controller
         }
         return false;
     }
+
 
     public void execute(Command cmd)
     {
@@ -259,7 +229,7 @@ class Controller
             System.out.println("Look");
             break;
             case "Inventory":
-            System.out.println("Inventory");
+            cmd.getPlayer().inventory();
             break;
             case "Fork":
             System.out.println("Fork");
