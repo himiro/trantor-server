@@ -46,6 +46,6 @@ public class Trantor {
         team2.setPlayers(plTeam2);
 
         controller.createCommand("Look", 126);
-        //controller.createCommand("Forward", 125);
+        controller.createCommand("Forward", 125);
     }
 }

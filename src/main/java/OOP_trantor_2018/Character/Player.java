@@ -165,4 +165,14 @@ class Player extends Character
   {
     System.out.println("Player reproducted");
   }
+
+  public void addCommand(String command)
+  {
+
+  }
+
+  public void removeCommand(String command)
+  {
+
+  }
 }

@@ -141,15 +141,16 @@ class Controller
 
   protected Player findPlayerBySocketId(int socketId)
   {
-    System.out.println("findPlayerBySocketId() " + this.teams.size());
     for (Team team : this.teams)
     {
-      System.out.println("Enter in " + team.getTeamName() + " team");
       for (Player player : team.getPlayers())
       {
-        System.out.println("Player number " + player.getId() + " / " + player.getIdSocket());
+        if (player.getIdSocket() == socketId)
+        {
+          return (player);
+        }
       }
     }
-    return new Player();
+    return null;
   }
 }
