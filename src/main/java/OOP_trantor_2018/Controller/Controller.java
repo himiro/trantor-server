@@ -98,55 +98,96 @@ class Controller
     {
         //Creation et initialisation de l'objet Map
         // /!\ Ne pas oublier d'initialiser chaque Tile de la Map
-        
+
         //debug
         this.worldMap = new WorldMap(10, 10);
         System.out.println("World Map initialisation");
     }
 
-    public void createCommand(String command, int socketId)
+    public Command createCommand(String command, int socketId)
     {
         //create command object to add it to the timeline
         Player tmp = this.findPlayerBySocketId(socketId);
         Command newCmd = new Command(command, tmp);
         this.addCommand(newCmd);
+        return newCmd;
     }
 
     public void addCommand(Command command)
     {
-        //If player's stack !empty : add command to the player.
+        //If player's queue !empty : add command to the player.
         //Else : add command to the timeline
-        if (command.getPlayer().getStack().empty() && timeline.isCommandFromPlayer(command) == false)
+        //System.out.println("ICIIIIIIIIIIII : " + command.getPlayer().getQueue().empty());
+        if (command.getPlayer().getQueue().size() == 0 && timeline.isCommandFromPlayer(command) == false)
         {
-            timeline.addCommand(command);
+            System.out.println("First command");
+            command = timeline.addCommand(command);
         }
         else
         {
-            if (command.getPlayer().getStack().size() < 10)
+            if (command.getPlayer().getQueue().size() < 10)
             {
-                command.getPlayer().getStack().push(command);
+                //System.out.println("Plus command");
+                Date endDate = new Date(System.currentTimeMillis());
+                if (command.getName().startsWith("Broadcast "))
+                {
+                    endDate = new Date(System.currentTimeMillis() + (this.timeline.getCommandTime().get(command.getName().substring(0, 9)) * 1000));
+                }
+                else if (command.getName().startsWith("Take "))
+                {
+                    endDate = new Date(System.currentTimeMillis() + (this.timeline.getCommandTime().get(command.getName().substring(0, 4)) * 1000));
+                }
+                else if (command.getName().startsWith("Set "))
+                {
+                    endDate = new Date(System.currentTimeMillis() + (this.timeline.getCommandTime().get(command.getName().substring(0, 3)) * 1000));
+                }
+                else
+                {
+                    endDate = new Date(System.currentTimeMillis() + (this.timeline.getCommandTime().get(command.getName()) * 1000));
+                }
+
+                command.setEnd(endDate);
+                command.getPlayer().getQueue().add(command);
             }
         }
+    }
+
+    public void pushCommandToTimeline(Command command)
+    {
+        System.out.println("\nPush command to timeline : " + command.getName());
+        command = timeline.addCommand(command);
     }
 
     public void removeCommand(Command command)
     {
         //if action finished
-        //remove the command from the timeline and check if another command is waiting in the player's stack
+        //remove the command from the timeline and check if another command is waiting in the player's queue
         // if yes -> addCommand from player
         //execute
         this.timeline.getCommands().remove(command);
+        System.out.println("Execute command : " + command.getName());
         this.execute(command);
-        System.out.println("Remove command");
-        if (!command.getPlayer().getStack().empty())
+        if (command.getPlayer().getQueue().size() != 0)
         {
-            this.addCommand(command.getPlayer().getStack().peek());
+            this.pushCommandToTimeline(command.getPlayer().getQueue().peek());
+
+            /*System.out.println("\n\n\n");
+            System.out.println("TIMELINE : ");
+            this.getTimeline().getCommands().forEach(k->{
+                System.out.println(""+k.getName());
+            });
+            System.out.println("");
+            System.out.println("Player queue : ");
+            command.getPlayer().getQueue().forEach(k->{
+                System.out.println(""+k.getName());
+            });
+            System.out.println("\n\n\n");*/
         }
         else
         {
             System.out.println("Any command left");
-        }
     }
+}
 
     public void newTeam(String teamName)
     {
@@ -184,10 +225,18 @@ class Controller
     {
         //go through timeline if currentdate > endDate call remove command
         Date currentDate = new Date(System.currentTimeMillis());
-        if (command.getEnd().before(currentDate))
+
+        for (Command tmp : this.timeline.getCommands())
         {
-            this.removeCommand(command);
-            return true;
+            if (tmp.equals(command))
+            {
+                if (tmp.getEnd().getTime() > currentDate.getTime())
+                {
+                    this.removeCommand(tmp);
+                    return true;
+                }
+                return false;
+            }
         }
         return false;
     }
@@ -201,10 +250,10 @@ class Controller
             cmd.getPlayer().forward(this.worldMap.getSizeX(), this.worldMap.getSizeY());
             break;
             case "Right":
-            System.out.println("Right");
+            cmd.getPlayer().right();
             break;
             case "Left":
-            System.out.println("Left");
+            cmd.getPlayer().left();
             break;
             case "Look":
             System.out.println("Look");

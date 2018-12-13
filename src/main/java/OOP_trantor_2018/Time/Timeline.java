@@ -27,18 +27,19 @@ class Timeline extends TimeManagement
     return this.COMMAND_TIME;
   }
 
-  public void addCommand(Command command)
+  public Command addCommand(Command command)
   {
     //add command in the timeline + define endTime
-    // + if player's stack !empty -> remove it from player's stack
+    // + if player's queue !empty -> remove it from player's queue
     Date endDate = new Date(System.currentTimeMillis() + (COMMAND_TIME.get(command.getName()) * 1000));
 
     command.setEnd(endDate);
     this.commands.add(command);
-    if (command.getPlayer().getStack().size() > 0)
+    if (command.getPlayer().getQueue().size() > 0)
     {
-      command.getPlayer().getStack().pop();
+      command.getPlayer().getQueue().remove();
     }
+    return command;
   }
 
   private void initCommandTime()

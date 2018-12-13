@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class Trantor {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         System.out.println("Hello World !");
 
         Linemate linemate = new Linemate();
@@ -45,38 +45,38 @@ public class Trantor {
         plTeam2.add(player4);
         team2.setPlayers(plTeam2);
 
-        controller.createCommand("Forward", 126);
-        controller.createCommand("Left", 126);
-        controller.createCommand("Right", 126);
-        controller.createCommand("Look", 126);
-        controller.createCommand("Inventory", 126);
-        controller.createCommand("Broadcast blah blah", 126);
-        controller.createCommand("Fork", 126);
-        controller.createCommand("Eject", 126);
-        controller.createCommand("Take Food", 126);
-        controller.createCommand("Set Food", 126);
-        controller.createCommand("Incantation", 126);
+        Command forwardCmd = controller.createCommand("Forward", 126);
+        Command leftCmd = controller.createCommand("Left", 126);
+        Command rightCmd = controller.createCommand("Right", 126);
+        Command lookCmd = controller.createCommand("Look", 126);
+        Command inventoryCmd = controller.createCommand("Inventory", 126);
+        Command broadcastCmd = controller.createCommand("Broadcast blah blah", 126);
+        Command forkCmd = controller.createCommand("Fork", 126);
+        Command ejectCmd = controller.createCommand("Eject", 126);
+        Command takeCmd = controller.createCommand("Take Food", 126);
+        Command setCmd = controller.createCommand("Set Food", 126);
+        Command incantationCmd = controller.createCommand("Incantation", 126);
+        //Plus de 10 commandes
         controller.createCommand("Forward", 126);
         controller.createCommand("Broadcast dezio edjzio", 126);
+        Command falseCmd = controller.createCommand("False", 126);
 
-        Player tmp = controller.findPlayerBySocketId(126);
-        Command forwardCmd = new Command("Forward", tmp);
-        Command leftCmd = new Command("Left", tmp);
-        Command rightCmd = new Command("Right", tmp);
-        Command lookCmd = new Command("Look", tmp);
-        Command inventoryCmd = new Command("Inventory", tmp);
-        Command broadcastCmd = new Command("Broadcast blah blah", tmp);
-        Command forkCmd = new Command("Fork", tmp);
-        Command ejectCmd = new Command("Eject", tmp);
-        Command takeCmd = new Command("Take Food", tmp);
-        Command setCmd = new Command("Set Food", tmp);
-        Command incantationCmd = new Command("Incantation", tmp);
-        controller.removeCommand(broadcastCmd);
-
-        System.out.println(forwardCmd.getName());
-        while (true)
+        /*System.out.println("\n\n\n");
+        System.out.println("TIMELINE : ");
+        controller.getTimeline().getCommands().forEach(k->{
+            System.out.println(""+k.getName());
+        });
+        System.out.println("");
+        System.out.println("Player queue : ");
+        player4.getQueue().forEach(k->{
+            System.out.println(""+k.getName());
+        });
+        System.out.println("\n\n\n");*/
+        while(true)
         {
-            controller.execute(forwardCmd);
+            controller.isActionFinished(forwardCmd);
+            controller.isActionFinished(leftCmd);
+            controller.isActionFinished(rightCmd);
         }
 
     }

@@ -8,7 +8,7 @@ class Player extends Character
   protected List<Ressource> inventory = new ArrayList<Ressource>();
   protected static int nb = 1;
   protected int id;
-  protected Stack<Command> stack = new Stack<Command>();
+  protected Queue<Command> queue = new LinkedList<Command>();
 
   //For debug
   Player()
@@ -109,21 +109,21 @@ class Player extends Character
   }
 
   /**
-  * Returns value of stack
+  * Returns value of queue
   * @return
   */
-  public Stack<Command> getStack()
+  public Queue<Command> getQueue()
   {
-    return this.stack;
+    return this.queue;
   }
 
   /**
-  * Sets new value of stack
+  * Sets new value of queue
   * @param
   */
-  public void setStack(Stack<Command> stack)
+  public void setQueue(Queue<Command> queue)
   {
-    this.stack = stack;
+    this.queue = queue;
   }
 
   public void feed()
@@ -137,43 +137,79 @@ class Player extends Character
     {
       case NORTH:
       System.out.println("Player goes North");
-        this.y++;
-        if (this.y > sizeY)
-          this.y = 0;
+      this.y++;
+      if (this.y > sizeY)
+      this.y = 0;
       break;
       case EAST:
       System.out.println("Player goes East");
       this.x++;
       if (this.x > sizeX)
-        this.x = 0;
+      this.x = 0;
       break;
       case WEST:
       System.out.println("Player goes West");
       this.x--;
       if (this.x < 0)
-        this.x = sizeX;
+      this.x = sizeX;
       break;
       case SOUTH:
       System.out.println("Player goes South");
       this.y--;
       if (this.y < 0)
-        this.y = sizeY;
+      this.y = sizeY;
       break;
       default:
       break;
     }
     System.out.println("X : " + this.x + " Y : " + this.y);
-    System.exit(0);
   }
 
   public void left()
   {
-    System.out.println("Player goes left");
+    switch (this.orientation)
+    {
+      case NORTH:
+      this.orientation = orientation.WEST;
+      System.out.println("Player turn WEST");
+      break;
+      case EAST:
+      this.orientation = orientation.NORTH;
+      System.out.println("Player turn North");
+      break;
+      case WEST:
+      this.orientation = orientation.SOUTH;
+      System.out.println("Player turn South");
+      break;
+      case SOUTH:
+      this.orientation = orientation.EAST;
+      System.out.println("Player turn East");
+      break;
+    }
   }
 
   public void right()
   {
-    System.out.println("Player goes right");
+    switch (this.orientation)
+    {
+      case NORTH:
+      this.orientation = orientation.EAST;
+      System.out.println("Player turn East");
+      break;
+      case EAST:
+      this.orientation = orientation.SOUTH;
+      System.out.println("Player turn South");
+      break;
+      case WEST:
+      this.orientation = orientation.NORTH;
+      System.out.println("Player turn North");
+      break;
+      case SOUTH:
+      this.orientation = orientation.WEST;
+      System.out.println("Player turn West");
+      break;
+    }
+    System.exit(0);
   }
 
   public void look()
