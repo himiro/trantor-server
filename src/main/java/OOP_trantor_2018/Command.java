@@ -73,4 +73,5 @@ class Command
 	{
 		this.player = player;
 	}
+
 }

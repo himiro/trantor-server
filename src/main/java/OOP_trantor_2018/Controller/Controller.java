@@ -105,21 +105,44 @@ class Controller
   {
     //create command object to add it to the timeline
     Player tmp = this.findPlayerBySocketId(socketId);
-
+    Command newCmd = new Command(command, tmp);
+    this.addCommand(newCmd);
   }
 
   public void addCommand(Command command)
   {
     //If player's stack !empty : add command to the player.
     //Else : add command to the timeline
-    System.out.println("New command in the player' stack");
+    if (command.getPlayer().getStack().empty() && timeline.isCommandFromPlayer(command) == false)
+    {
+      timeline.addCommand(command);
+    }
+    else
+    {
+      if (command.getPlayer().getStack().size() < 10)
+      {
+        command.getPlayer().getStack().push(command);
+      }
+    }
   }
 
-  //Normalement pas utilisée
   public void removeCommand(Command command)
   {
-    //remove from Timeline
-    System.out.println("Command removed from the player' stack");
+    //if action finished
+    //remove the command from the timeline and check if another command is waiting in the player's stack
+    // if yes -> addCommand from player
+    //execute
+    this.timeline.getCommands().remove(command);
+    this.timeline.execute(command);
+    System.out.println("Remove command");
+    if (!command.getPlayer().getStack().empty())
+      {
+        this.addCommand(command.getPlayer().getStack().peek());
+      }
+    else
+      {
+        System.out.println("Any command left");
+      }
   }
 
   public void newTeam(String teamName)
@@ -152,5 +175,17 @@ class Controller
       }
     }
     return null;
+  }
+
+  public boolean isActionFinished(Command command)
+  {
+    //go through timeline if currentdate > endDate call remove command
+    Date currentDate = new Date(System.currentTimeMillis());
+    if (command.getEnd().before(currentDate))
+    {
+      this.removeCommand(command);
+      return true;
+    }
+    return false;
   }
 }

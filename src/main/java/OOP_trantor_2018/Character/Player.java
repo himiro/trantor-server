@@ -8,7 +8,7 @@ class Player extends Character
   protected List<Ressource> inventory = new ArrayList<Ressource>();
   protected static int nb = 1;
   protected int id;
-  protected Stack<String> stack = new Stack<String>();
+  protected Stack<Command> stack = new Stack<Command>();
 
   //For debug
   Player()
@@ -112,7 +112,7 @@ class Player extends Character
   * Returns value of stack
   * @return
   */
-  public Stack getStack()
+  public Stack<Command> getStack()
   {
     return this.stack;
   }
@@ -121,7 +121,7 @@ class Player extends Character
   * Sets new value of stack
   * @param
   */
-  public void setStack(Stack<String> stack)
+  public void setStack(Stack<Command> stack)
   {
     this.stack = stack;
   }
@@ -164,15 +164,5 @@ class Player extends Character
   public void reproduct()
   {
     System.out.println("Player reproducted");
-  }
-
-  public void addCommand(String command)
-  {
-
-  }
-
-  public void removeCommand(String command)
-  {
-
   }
 }

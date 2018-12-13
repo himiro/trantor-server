@@ -46,6 +46,22 @@ public class Trantor {
         team2.setPlayers(plTeam2);
 
         controller.createCommand("Look", 126);
-        controller.createCommand("Forward", 125);
+        controller.createCommand("Forward", 126);
+        controller.createCommand("Forward", 126);
+        controller.createCommand("Forward", 126);
+        controller.createCommand("Forward", 126);
+        controller.createCommand("Forward", 126);
+        controller.createCommand("Forward", 126);
+        controller.createCommand("Forward", 126);
+        controller.createCommand("Forward", 126);
+        controller.createCommand("Forward", 126);
+        controller.createCommand("Forward", 126);
+        controller.createCommand("Forward", 126);
+        controller.createCommand("Broadcast blah blah", 126);
+
+        Player tmp = controller.findPlayerBySocketId(126);
+        Command newCmd = new Command("Broadcast blah blah", tmp);
+        controller.removeCommand(newCmd);
+
     }
 }
