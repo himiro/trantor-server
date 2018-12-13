@@ -6,9 +6,10 @@ class WorldMap
   protected int sizeY;
   protected List<Tile> tiles = new ArrayList<Tile>();
 
-  WorldMap()
+  WorldMap(int sizeX, int sizeY)
   {
-
+    this.sizeX = sizeX;
+    this.sizeY = sizeY;
   }
 
   public int getSizeX()

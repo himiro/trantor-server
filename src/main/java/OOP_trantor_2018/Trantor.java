@@ -31,9 +31,9 @@ public class Trantor {
         Controller controller = new Controller(teams);
 
         Player player1 = new Player(10, 10, 123, team1.getTeamName(), Orientation.NORTH, base_ressource);
-        Player player2 = new Player(10, 10, 124, team1.getTeamName(), Orientation.SOUTH, base_ressource);
+        Player player2 = new Player(0, 0, 124, team1.getTeamName(), Orientation.SOUTH, base_ressource);
         Player player3 = new Player(10, 10, 125, team2.getTeamName(), Orientation.EAST, base_ressource);
-        Player player4 = new Player(10, 10, 126, team2.getTeamName(), Orientation.WEST, base_ressource);
+        Player player4 = new Player(0, 0, 126, team2.getTeamName(), Orientation.WEST, base_ressource);
 
         List<Player> plTeam1 = new ArrayList<Player>();
         plTeam1.add(player1);
@@ -45,23 +45,39 @@ public class Trantor {
         plTeam2.add(player4);
         team2.setPlayers(plTeam2);
 
+        controller.createCommand("Forward", 126);
+        controller.createCommand("Left", 126);
+        controller.createCommand("Right", 126);
         controller.createCommand("Look", 126);
-        controller.createCommand("Forward", 126);
-        controller.createCommand("Forward", 126);
-        controller.createCommand("Forward", 126);
-        controller.createCommand("Forward", 126);
-        controller.createCommand("Forward", 126);
-        controller.createCommand("Forward", 126);
-        controller.createCommand("Forward", 126);
-        controller.createCommand("Forward", 126);
-        controller.createCommand("Forward", 126);
-        controller.createCommand("Forward", 126);
-        controller.createCommand("Forward", 126);
+        controller.createCommand("Inventory", 126);
         controller.createCommand("Broadcast blah blah", 126);
+        controller.createCommand("Fork", 126);
+        controller.createCommand("Eject", 126);
+        controller.createCommand("Take Food", 126);
+        controller.createCommand("Set Food", 126);
+        controller.createCommand("Incantation", 126);
+        controller.createCommand("Forward", 126);
+        controller.createCommand("Broadcast dezio edjzio", 126);
 
         Player tmp = controller.findPlayerBySocketId(126);
-        Command newCmd = new Command("Broadcast blah blah", tmp);
-        controller.removeCommand(newCmd);
+        Command forwardCmd = new Command("Forward", tmp);
+        Command leftCmd = new Command("Left", tmp);
+        Command rightCmd = new Command("Right", tmp);
+        Command lookCmd = new Command("Look", tmp);
+        Command inventoryCmd = new Command("Inventory", tmp);
+        Command broadcastCmd = new Command("Broadcast blah blah", tmp);
+        Command forkCmd = new Command("Fork", tmp);
+        Command ejectCmd = new Command("Eject", tmp);
+        Command takeCmd = new Command("Take Food", tmp);
+        Command setCmd = new Command("Set Food", tmp);
+        Command incantationCmd = new Command("Incantation", tmp);
+        controller.removeCommand(broadcastCmd);
+
+        System.out.println(forwardCmd.getName());
+        while (true)
+        {
+            controller.execute(forwardCmd);
+        }
 
     }
 }

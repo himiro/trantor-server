@@ -131,9 +131,49 @@ class Player extends Character
     System.out.println("Player feed");
   }
 
-  public void move()
+  public void forward(int sizeX, int sizeY)
   {
-    System.out.println("Player moved");
+    switch (this.orientation)
+    {
+      case NORTH:
+      System.out.println("Player goes North");
+        this.y++;
+        if (this.y > sizeY)
+          this.y = 0;
+      break;
+      case EAST:
+      System.out.println("Player goes East");
+      this.x++;
+      if (this.x > sizeX)
+        this.x = 0;
+      break;
+      case WEST:
+      System.out.println("Player goes West");
+      this.x--;
+      if (this.x < 0)
+        this.x = sizeX;
+      break;
+      case SOUTH:
+      System.out.println("Player goes South");
+      this.y--;
+      if (this.y < 0)
+        this.y = sizeY;
+      break;
+      default:
+      break;
+    }
+    System.out.println("X : " + this.x + " Y : " + this.y);
+    System.exit(0);
+  }
+
+  public void left()
+  {
+    System.out.println("Player goes left");
+  }
+
+  public void right()
+  {
+    System.out.println("Player goes right");
   }
 
   public void look()

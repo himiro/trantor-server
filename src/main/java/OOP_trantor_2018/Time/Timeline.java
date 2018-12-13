@@ -27,53 +27,6 @@ class Timeline extends TimeManagement
     return this.COMMAND_TIME;
   }
 
-  public void execute(Command cmd)
-  {
-    //call command
-    switch(cmd.getName())
-    {
-      case "Forward":
-      System.out.println("Forward");
-      break;
-      case "Right":
-      System.out.println("Right");
-      break;
-      case "Left":
-      System.out.println("Left");
-      break;
-      case "Look":
-      System.out.println("Look");
-      break;
-      case "Inventory":
-      System.out.println("Inventory");
-      break;
-      case "Fork":
-      System.out.println("Fork");
-      break;
-      case "Eject":
-      System.out.println("Eject");
-      break;
-      case "Incantation":
-      System.out.println("Incantation");
-      break;
-      default:
-      if (cmd.getName().startsWith("Broadcast ") == true)
-      {
-        System.out.println("Broadcast");
-      }
-      else if (cmd.getName().startsWith("Take ") == true)
-      {
-        System.out.println("Take");
-      }
-      else if (cmd.getName().startsWith("Set ") == true)
-      {
-        System.out.println("Set");
-      }
-      break;
-    }
-    System.out.println("Execute");
-  }
-
   public void addCommand(Command command)
   {
     //add command in the timeline + define endTime
