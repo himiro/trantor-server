@@ -59,11 +59,8 @@ public class ClientProcessor implements Runnable {
                 debug += "Demande de l'adresse : " + remote.getAddress().getHostAddress() +".";
                 debug += " Sur le port : " + remote.getPort() + ".\n";
                 System.err.println("\n" + debug);
-
-
-                //On envoie la réponse au client
-                writer.write(toSend);
-                writer.flush();
+                response = read();
+                System.out.println(response);
                 if(closeConnexion){
                     System.err.println("COMMANDE CLOSE DETECTEE ! ");
                     writer = null;

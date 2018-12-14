@@ -5,16 +5,15 @@ class Controller
     protected Timeline timeline;
     protected WorldMap worldMap;
     protected List<Team> teams = new ArrayList<Team>();
-    protected int maxPlayerPerTeam;
 
-    //debug
     Controller(List<Team> teams, int frequence)
     {
         this.timeline = new Timeline(frequence);
-        this.initWorldMap();
         this.teams = teams;
+        this.initWorldMap();
     }
 
+    //debug
     Controller(int frequence)
     {
         this.timeline = new Timeline(frequence);
@@ -76,31 +75,43 @@ class Controller
         this.teams = teams;
     }
 
-    /**
-    * Returns value of maxPlayerPerTeam
-    * @return
-    */
-    public int getMaxPlayerPerTeam()
-    {
-        return this.maxPlayerPerTeam;
-    }
-
-    /**
-    * Sets new value of maxPlayerPerTeam
-    * @param
-    */
-    public void setMaxPlayerPerTeam(int maxPlayerPerTeam)
-    {
-        this.maxPlayerPerTeam = maxPlayerPerTeam;
-    }
-
     public void initWorldMap()
     {
         //Creation et initialisation de l'objet Map
         // /!\ Ne pas oublier d'initialiser chaque Tile de la Map
 
         //debug
-        this.worldMap = new WorldMap(10, 10);
+        Map<String, Ressource> base_ressource = new HashMap<String, Ressource>();
+        Linemate linemate = new Linemate(2);
+        Deraumere deraumere = new Deraumere();
+        Sibur sibur = new Sibur(4);
+        Mendiane mendiane = new Mendiane(-1);
+        Phiras phiras = new Phiras(32);
+        Thystame thystame = new Thystame();
+        Food food = new Food();
+        base_ressource.put("Linemate", linemate);
+        base_ressource.put("Deraumere", deraumere);
+        base_ressource.put("Sibur", sibur);
+        base_ressource.put("Mendiane", mendiane);
+        base_ressource.put("Phiras", phiras);
+        base_ressource.put("Thystame", thystame);
+        base_ressource.put("Food", food);
+        Player player1 = new Player(0, 10, 123, "Team1", Orientation.NORTH, base_ressource);
+        Player player2 = new Player(0, 10, 124, "Team1", Orientation.SOUTH, base_ressource);
+
+        List<Player> players = new ArrayList<Player>();
+        players.add(player1);
+        players.add(player2);
+        int sizeX = 10;
+        int sizeY = 10;
+        this.worldMap = new WorldMap(sizeX, sizeY);
+        for (int y = 0; y <= sizeY; y++)
+        {
+            for (int x = 0; x <= sizeX; x++)
+            {
+                this.worldMap.getTiles().add(new Tile(x, y, base_ressource, players));
+            }
+        }
         System.out.println("World Map initialisation");
     }
 
@@ -213,7 +224,6 @@ class Controller
 
     public void execute(Command cmd)
     {
-        //call command
         switch(cmd.getName())
         {
             case "Forward":
@@ -226,7 +236,7 @@ class Controller
             cmd.getPlayer().left();
             break;
             case "Look":
-            System.out.println("Look");
+            this.lookTiles(cmd.getPlayer());
             break;
             case "Inventory":
             cmd.getPlayer().inventory();
@@ -235,7 +245,11 @@ class Controller
             System.out.println("Fork");
             break;
             case "Eject":
-            System.out.println("Eject");
+            Tile ejectTile = this.worldMap.getTileByCoordinates(cmd.getPlayer().getX(), cmd.getPlayer().getY());
+            if (ejectTile != null)
+            {
+                cmd.getPlayer().eject(ejectTile.getPlayers(), this.worldMap.getSizeX(), this.worldMap.getSizeY());
+            }
             break;
             case "Incantation":
             System.out.println("Incantation");
@@ -247,14 +261,31 @@ class Controller
             }
             else if (cmd.getName().startsWith("Take ") == true)
             {
-                System.out.println("Take");
+                Tile takeTile = this.worldMap.getTileByCoordinates(cmd.getPlayer().getX(), cmd.getPlayer().getY());
+                cmd.getPlayer().take(takeTile, cmd.getName().substring(cmd.getName().lastIndexOf(' ') + 1));
             }
             else if (cmd.getName().startsWith("Set ") == true)
             {
-                System.out.println("Set");
+                Tile takeTile = this.worldMap.getTileByCoordinates(cmd.getPlayer().getX(), cmd.getPlayer().getY());
+                cmd.getPlayer().set(takeTile, cmd.getName().substring(cmd.getName().lastIndexOf(' ') + 1));
             }
             break;
         }
+    }
+
+    public void lookTiles(Player player)
+    {
+        System.out.println("Player looked around");
+        System.out.print("[");
+        //int middle = /* x if NORTH or SOUTH */;
+        //int middle = /* y if EAST or WEST */;
+        //for (int x = /* tile coordinate player*/; x < /* tile coordinate player + vision*/; i++)
+        //{
+        //    System.out.println("Tile seen : " + /*tile x, tile y*/);
+        Tile tile = this.worldMap.getTileByCoordinates(0, 0);
+        player.look(tile, false);
+        //    }
+        System.out.println("]");
     }
 
 }

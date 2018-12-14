@@ -128,6 +128,8 @@ class Player extends Character
 
   public void feed()
   {
+    int nb = this.getInventory().get("Food").getNb();
+    this.getInventory().get("Food").setNb(--nb);
     System.out.println("Player feed");
   }
 
@@ -211,16 +213,15 @@ class Player extends Character
     }
   }
 
-  public void look()
+  public void look(Tile tile, boolean last)
   {
-    System.out.println("Player looked around");
+    tile.displayRessources(last);
   }
 
   public void inventory()
   {
-    System.out.println("food " + this.inventory.get("food").getNb() + ", linemate " + this.inventory.get("linemate").getNb() + ", deraumere " + this.inventory.get("deraumere").getNb() + ", sibur " + this.inventory.get("sibur").getNb()
-    + ", mendiane " + this.inventory.get("mendiane").getNb() + ", phiras " + this.inventory.get("phiras").getNb() + ", thystame " + this.inventory.get("thystame").getNb());
-    System.exit(0);
+    System.out.println("food " + this.inventory.get("Food").getNb() + ", linemate " + this.inventory.get("Linemate").getNb() + ", deraumere " + this.inventory.get("Deraumere").getNb() + ", sibur " + this.inventory.get("Sibur").getNb()
+    + ", mendiane " + this.inventory.get("Mendiane").getNb() + ", phiras " + this.inventory.get("Phiras").getNb() + ", thystame " + this.inventory.get("Thystame").getNb());
   }
 
   public void broadcast()
@@ -228,14 +229,30 @@ class Player extends Character
     System.out.println("Player make a sound");
   }
 
-  public void take()
+  public void take(Tile tile, String object)
   {
-    System.out.println("Player took ressource");
+    int nbPlayer = this.getInventory().get(object).getNb();
+    int nbTile = tile.getRessources().get(object).getNb();
+    if (nbTile > 0)
+    {
+      tile.getRessources().get(object).setNb(--nbTile);
+      this.getInventory().get(object).setNb(++nbPlayer);
+      System.out.println("Player took " + tile.getRessources().get(object).getName() + ".There is " + tile.getRessources().get(object).getNb() + " last on the tile");
+      System.out.println("Player took " + tile.getRessources().get(object).getName() + ".He has " + this.getInventory().get(object).getNb() + " in his inventory");
+    }
   }
 
-  public void drop()
+  public void set(Tile tile, String object)
   {
-    System.out.println("Player dropped ressource");
+    int nbPlayer = this.getInventory().get(object).getNb();
+    int nbTile = tile.getRessources().get(object).getNb();
+    if (nbPlayer > 0)
+    {
+      tile.getRessources().get(object).setNb(++nbTile);
+      this.getInventory().get(object).setNb(--nbPlayer);
+      System.out.println("Player drop " + tile.getRessources().get(object).getName() + ".There is " + tile.getRessources().get(object).getNb() + " last on the tile");
+      System.out.println("Player drop " + tile.getRessources().get(object).getName() + ".He has " + this.getInventory().get(object).getNb() + " in his inventory");
+    }
   }
 
   public void elevation()
@@ -243,8 +260,44 @@ class Player extends Character
     System.out.println("Players are doing some magic stuff");
   }
 
-  public void reproduct()
+  public void fork()
   {
     System.out.println("Player reproducted");
+  }
+
+  public void eject(List<Player> players, int sizeX, int sizeY)
+  {
+    if (players != null)
+    {
+      for (Player pl : players)
+      {
+        switch(this.orientation)
+        {
+          case SOUTH:
+          pl.setY(pl.getY()+1);
+          if (pl.getY() > sizeY)
+          pl.setY(0);
+          break;
+          case NORTH:
+          pl.setY(pl.getY()-1);
+          if (pl.getY() < 0)
+          pl.setY(sizeY);
+          break;
+          case WEST:
+          pl.setX(pl.getX()-1);
+          if (pl.getX() < 0)
+          pl.setX(sizeX);
+          break;
+          case EAST:
+          pl.setX(pl.getX()+1);
+          if (pl.getX() > sizeY)
+          pl.setX(0);
+          break;
+          default:
+          break;
+        }
+      }
+      System.out.println("Player eject");
+    }
   }
 }

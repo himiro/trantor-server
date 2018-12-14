@@ -4,15 +4,23 @@ class Tile
 {
     protected int x;
     protected int y;
-    protected List<Ressource> ressources = new ArrayList<Ressource>();
+    protected Map<String, Ressource> ressources = new HashMap<String, Ressource>();
     protected List<Player> players = new ArrayList<Player>();
     protected List<Egg> egg = new ArrayList<Egg>();
 
-    public Tile(int x, int y, List<Ressource> ressources)
+    public Tile(int x, int y, Map<String, Ressource> ressources)
     {
         this.x = x;
         this.y = y;
         this.ressources = ressources;
+    }
+
+    public Tile(int x, int y, Map<String, Ressource> ressources, List<Player> players)
+    {
+        this.x = x;
+        this.y = y;
+        this.ressources = ressources;
+        this.players = players;
     }
 
     /**
@@ -55,7 +63,7 @@ class Tile
     * Returns value of ressources
     * @return
     */
-    public List<Ressource> getRessources()
+    public Map<String, Ressource> getRessources()
     {
         return this.ressources;
     }
@@ -64,7 +72,7 @@ class Tile
     * Sets new value of ressources
     * @param
     */
-    public void setRessources(List<Ressource> ressources)
+    public void setRessources(Map<String, Ressource> ressources)
     {
         this.ressources = ressources;
     }
@@ -105,4 +113,24 @@ class Tile
         this.egg = egg;
     }
 
+    public void displayRessources(boolean last)
+    {
+        boolean firstElement = true;
+        String display = "";
+
+        for (Map.Entry<String, Ressource> entry : this.ressources.entrySet())
+        {
+            if (entry.getValue().getNb() > 0)
+            {
+                display += entry.getKey() + " ";
+            }
+            //System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue().getNb());
+        }
+        if (last == false)
+        {
+            display = display.trim();
+            display += ",";
+        }
+        System.out.print(display);
+    }
 }

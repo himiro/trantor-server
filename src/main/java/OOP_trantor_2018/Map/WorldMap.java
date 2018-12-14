@@ -41,4 +41,16 @@ class WorldMap
   {
     this.tiles = tiles;
   }
+
+  public Tile getTileByCoordinates(int x, int y)
+  {
+    for (Tile tmp : this.tiles)
+    {
+      if (tmp.getX() == x && tmp.getY() == y)
+      {
+        return (tmp);
+      }
+    }
+    return null;
+  }
 }
