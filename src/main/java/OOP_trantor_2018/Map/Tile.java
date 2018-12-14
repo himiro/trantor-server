@@ -8,6 +8,10 @@ class Tile
     protected List<Player> players = new ArrayList<Player>();
     protected List<Egg> egg = new ArrayList<Egg>();
 
+    public Tile()
+    {
+    }
+
     public Tile(int x, int y, Map<String, Ressource> ressources)
     {
         this.x = x;
@@ -113,7 +117,7 @@ class Tile
         this.egg = egg;
     }
 
-    public void displayRessources(boolean last)
+    public void displayRessources()
     {
         boolean firstElement = true;
         String display = "";
@@ -124,13 +128,9 @@ class Tile
             {
                 display += entry.getKey() + " ";
             }
-            //System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue().getNb());
         }
-        if (last == false)
-        {
-            display = display.trim();
-            display += ",";
-        }
+        display = display.trim();
+        display += ",";
         System.out.print(display);
     }
 }

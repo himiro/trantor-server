@@ -96,8 +96,8 @@ class Controller
         base_ressource.put("Phiras", phiras);
         base_ressource.put("Thystame", thystame);
         base_ressource.put("Food", food);
-        Player player1 = new Player(0, 10, 123, "Team1", Orientation.NORTH, base_ressource);
-        Player player2 = new Player(0, 10, 124, "Team1", Orientation.SOUTH, base_ressource);
+        Player player1 = new Player(5, 5, 123, "Team1", Orientation.NORTH, base_ressource);
+        Player player2 = new Player(5, 5, 124, "Team1", Orientation.SOUTH, base_ressource);
 
         List<Player> players = new ArrayList<Player>();
         players.add(player1);
@@ -277,14 +277,39 @@ class Controller
     {
         System.out.println("Player looked around");
         System.out.print("[");
-        //int middle = /* x if NORTH or SOUTH */;
-        //int middle = /* y if EAST or WEST */;
-        //for (int x = /* tile coordinate player*/; x < /* tile coordinate player + vision*/; i++)
-        //{
-        //    System.out.println("Tile seen : " + /*tile x, tile y*/);
-        Tile tile = this.worldMap.getTileByCoordinates(0, 0);
-        player.look(tile, false);
-        //    }
+        int x = player.getX();
+        int y = player.getY();
+        int length = 2;
+        Tile tile = new Tile();
+
+        tile = this.worldMap.getTileByCoordinates(player.getX(), player.getY());
+        player.look(tile);
+        while (y != (player.getY() + player.getVision()) % (this.worldMap.getSizeY()))
+        {
+            while (x != (player.getX() + length))
+            {
+                tile = this.worldMap.getTileByCoordinates(x % this.worldMap.getSizeX(), y % this.worldMap.getSizeY());
+                player.look(tile);
+                x++;
+            }
+            if (player.getX() - length < 0)
+            {
+                x = player.getX() + (this.worldMap.getSizeX() - length);
+            }
+            else
+            {
+                x = (player.getX() - length);
+            }
+            if (y > this.worldMap.getSizeY())
+            {
+                y = y % this.worldMap.getSizeY();
+            }
+            else
+            {
+                y++;
+            }
+            length++;
+        }
         System.out.println("]");
     }
 

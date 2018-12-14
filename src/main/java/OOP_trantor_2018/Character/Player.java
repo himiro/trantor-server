@@ -10,12 +10,6 @@ class Player extends Character
   protected int id;
   protected Queue<Command> queue = new LinkedList<Command>();
 
-  //For debug
-  Player()
-  {
-    super(10, 10, "debug", Status.ALIVE, 42);
-  }
-
   Player(int x, int y, int idSocket, String teamName, Orientation orientation, Map<String, Ressource> inventory)
   {
     super(x, y, teamName, Status.ALIVE, idSocket);
@@ -213,9 +207,9 @@ class Player extends Character
     }
   }
 
-  public void look(Tile tile, boolean last)
+  public void look(Tile tile)
   {
-    tile.displayRessources(last);
+    tile.displayRessources();
   }
 
   public void inventory()

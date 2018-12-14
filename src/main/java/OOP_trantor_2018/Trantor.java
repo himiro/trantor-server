@@ -2,11 +2,10 @@ import java.util.*;
 
 public class Trantor {
     public static void main(String[] args) throws InterruptedException {
-        System.out.println("Hello World !");
         Parser Pars = new Parser(args);
         Server serv = new Server(4242, Pars);
         serv.open();
-        /*Linemate linemate = new Linemate();
+        Linemate linemate = new Linemate();
         Deraumere deraumere = new Deraumere();
         Sibur sibur = new Sibur();
         Mendiane mendiane = new Mendiane();
@@ -35,7 +34,7 @@ public class Trantor {
         Player player1 = new Player(10, 10, 123, team1.getTeamName(), Orientation.NORTH, base_ressource);
         Player player2 = new Player(0, 0, 124, team1.getTeamName(), Orientation.SOUTH, base_ressource);
         Player player3 = new Player(10, 10, 125, team2.getTeamName(), Orientation.EAST, base_ressource);
-        Player player4 = new Player(0, 0, 126, team2.getTeamName(), Orientation.WEST, base_ressource);
+        Player player4 = new Player(5, 5, 126, team2.getTeamName(), Orientation.WEST, base_ressource);
 
         List<Player> plTeam1 = new ArrayList<Player>();
         plTeam1.add(player1);
@@ -75,17 +74,6 @@ public class Trantor {
         controller.createCommand("Broadcast dezio edjzio", 126);
         Command falseCmd = controller.createCommand("False", 126);
 
-        /*System.out.println("\n\n\n");
-        System.out.println("TIMELINE : ");
-        controller.getTimeline().getCommands().forEach(k->{
-            System.out.println(""+k.getName());
-        });
-        System.out.println("");
-        System.out.println("Player queue : ");
-        player4.getQueue().forEach(k->{
-            System.out.println(""+k.getName());
-        });
-        System.out.println("\n\n\n");
         while(true)
         {
             controller.isActionFinished(forwardCmd);
