@@ -3,8 +3,10 @@ import java.util.*;
 public class Trantor {
     public static void main(String[] args) throws InterruptedException {
         System.out.println("Hello World !");
-
-        Linemate linemate = new Linemate();
+        Parser Pars = new Parser(args);
+        Server serv = new Server(4242, Pars);
+        serv.open();
+        /*Linemate linemate = new Linemate();
         Deraumere deraumere = new Deraumere();
         Sibur sibur = new Sibur();
         Mendiane mendiane = new Mendiane();
@@ -71,14 +73,13 @@ public class Trantor {
         player4.getQueue().forEach(k->{
             System.out.println(""+k.getName());
         });
-        System.out.println("\n\n\n");*/
+        System.out.println("\n\n\n");
         while(true)
         {
             controller.isActionFinished(forwardCmd);
             controller.isActionFinished(leftCmd);
             controller.isActionFinished(rightCmd);
             controller.isActionFinished(inventoryCmd);
-        }
-
+        }*/
     }
 }
