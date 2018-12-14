@@ -13,13 +13,13 @@ public class Trantor {
         Food food = new Food();
 
         Map<String, Ressource> base_ressource = new HashMap<String, Ressource>();
-        base_ressource.put("linemate", linemate);
-        base_ressource.put("deraumere", deraumere);
-        base_ressource.put("sibur", sibur);
-        base_ressource.put("mendiane", mendiane);
-        base_ressource.put("phiras", phiras);
-        base_ressource.put("thystame", thystame);
-        base_ressource.put("food", food);
+        base_ressource.put("Linemate", linemate);
+        base_ressource.put("Deraumere", deraumere);
+        base_ressource.put("Sibur", sibur);
+        base_ressource.put("Mendiane", mendiane);
+        base_ressource.put("Phiras", phiras);
+        base_ressource.put("Thystame", thystame);
+        base_ressource.put("Food", food);
 
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
@@ -49,11 +49,23 @@ public class Trantor {
         Command leftCmd = controller.createCommand("Left", 126);
         Command rightCmd = controller.createCommand("Right", 126);
         Command inventoryCmd = controller.createCommand("Inventory", 126);
-        Command broadcastCmd = controller.createCommand("Broadcast blah blah", 126);
-        Command forkCmd = controller.createCommand("Fork", 126);
         Command ejectCmd = controller.createCommand("Eject", 126);
         Command takeCmd = controller.createCommand("Take Food", 126);
+        /*Command takeCmd = controller.createCommand("Take Linemate", 126);
+        Command takeCmd = controller.createCommand("Take Sibur", 126);
+        Command takeCmd = controller.createCommand("Take Phiras", 126);
+        Command takeCmd = controller.createCommand("Take Thystame", 126);
+        Command takeCmd = controller.createCommand("Take Mendiane", 126);
+        Command takeCmd = controller.createCommand("Take Deraumere", 126);*/
         Command setCmd = controller.createCommand("Set Food", 126);
+        /*Command setCmd = controller.createCommand("Set Linemate", 126);
+        Command setCmd = controller.createCommand("Set Sibur", 126);
+        Command setCmd = controller.createCommand("Set Phiras", 126);
+        Command setCmd = controller.createCommand("Set Thystame", 126);
+        Command setCmd = controller.createCommand("Set Mendiane", 126);
+        Command setCmd = controller.createCommand("Set Deraumere", 126);*/
+        Command broadcastCmd = controller.createCommand("Broadcast blah blah", 126);
+        Command forkCmd = controller.createCommand("Fork", 126);
         Command incantationCmd = controller.createCommand("Incantation", 126);
         Command lookCmd = controller.createCommand("Look", 126);
         //Plus de 10 commandes
@@ -78,6 +90,9 @@ public class Trantor {
             controller.isActionFinished(leftCmd);
             controller.isActionFinished(rightCmd);
             controller.isActionFinished(inventoryCmd);
+            controller.isActionFinished(ejectCmd);
+            controller.isActionFinished(takeCmd);
+            controller.isActionFinished(setCmd);
         }
 
     }

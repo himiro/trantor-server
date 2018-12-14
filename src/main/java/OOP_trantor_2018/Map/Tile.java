@@ -4,16 +4,24 @@ class Tile
 {
   protected int x;
   protected int y;
-  protected List<Ressource> ressources = new ArrayList<Ressource>();
+  protected Map<String, Ressource> ressources = new HashMap<String, Ressource>();
   protected List<Player> players = new ArrayList<Player>();
   protected List<Egg> egg = new ArrayList<Egg>();
 
-	public Tile(int x, int y, List<Ressource> ressources)
-  {
-		this.x = x;
-		this.y = y;
-		this.ressources = ressources;
-	}
+	public Tile(int x, int y, Map<String, Ressource> ressources)
+    {
+        this.x = x;
+        this.y = y;
+        this.ressources = ressources;
+    }
+
+    public Tile(int x, int y, Map<String, Ressource> ressources, List<Player> players)
+    {
+        this.x = x;
+        this.y = y;
+        this.ressources = ressources;
+        this.players = players;
+    }
 
 	/**
 	* Returns value of x
@@ -55,7 +63,7 @@ class Tile
 	* Returns value of ressources
 	* @return
 	*/
-	public List<Ressource> getRessources()
+	public Map<String, Ressource> getRessources()
 	{
 		return this.ressources;
 	}
@@ -64,7 +72,7 @@ class Tile
 	* Sets new value of ressources
 	* @param
 	*/
-	public void setRessources(List<Ressource> ressources)
+	public void setRessources(Map<String, Ressource> ressources)
 	{
 		this.ressources = ressources;
 	}
