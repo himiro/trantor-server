@@ -10,6 +10,7 @@ public class Server {
     private ServerSocket server = null;
     private boolean isRunning = true;
     private Parser Parser;
+    private Controller Control;
 
     public Server(int pPort, Parser pars)
     {
@@ -22,6 +23,8 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Controller controller = new Controller(Parser);
+        Control = controller;
     }
 
     public void open()

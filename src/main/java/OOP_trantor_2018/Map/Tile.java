@@ -19,14 +19,6 @@ class Tile
         this.ressources = ressources;
     }
 
-    public Tile(int x, int y, Map<String, Ressource> ressources, List<Player> players)
-    {
-        this.x = x;
-        this.y = y;
-        this.ressources = ressources;
-        this.players = players;
-    }
-
     /**
     * Returns value of x
     * @return
