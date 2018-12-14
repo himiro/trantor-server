@@ -15,14 +15,6 @@ class Tile
         this.ressources = ressources;
     }
 
-    public Tile(int x, int y, Map<String, Ressource> ressources, List<Player> players)
-    {
-        this.x = x;
-        this.y = y;
-        this.ressources = ressources;
-        this.players = players;
-    }
-
     /**
     * Returns value of x
     * @return
@@ -124,13 +116,13 @@ class Tile
             {
                 display += entry.getKey() + " ";
             }
-            //System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue().getNb());
+            System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue().getNb());
         }
         if (last == false)
         {
             display = display.trim();
             display += ",";
         }
-        System.out.print(display);
+        //System.out.print(display);
     }
 }

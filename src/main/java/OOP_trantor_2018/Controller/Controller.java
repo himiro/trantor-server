@@ -5,21 +5,15 @@ class Controller
     protected Timeline timeline;
     protected WorldMap worldMap;
     protected List<Team> teams = new ArrayList<Team>();
+    protected Parser parser;
 
-    Controller(List<Team> teams, int frequence)
+    Controller(Parser Pars)
     {
-        this.timeline = new Timeline(frequence);
-        this.teams = teams;
-        this.initWorldMap();
+        this.parser = Pars;
+        this.timeline = new Timeline(Pars.getFreq());
+        this.teams = Pars.getTeams();
+        this.initWorldMap(Pars.getX(), Pars.getY());
     }
-
-    //debug
-    Controller(int frequence)
-    {
-        this.timeline = new Timeline(frequence);
-        this.initWorldMap();
-    }
-
 
     /**
     * Returns value of timeline
@@ -75,44 +69,41 @@ class Controller
         this.teams = teams;
     }
 
-    public void initWorldMap()
+    public void initWorldMap(int x, int y)
     {
-        //Creation et initialisation de l'objet Map
-        // /!\ Ne pas oublier d'initialiser chaque Tile de la Map
+        List<Tile> LTile = new ArrayList<Tile>();
+        this.worldMap = new WorldMap(x, y);
+        int nb;
 
-        //debug
-        Map<String, Ressource> base_ressource = new HashMap<String, Ressource>();
-        Linemate linemate = new Linemate(2);
-        Deraumere deraumere = new Deraumere();
-        Sibur sibur = new Sibur(4);
-        Mendiane mendiane = new Mendiane(-1);
-        Phiras phiras = new Phiras(32);
-        Thystame thystame = new Thystame();
-        Food food = new Food();
-        base_ressource.put("Linemate", linemate);
-        base_ressource.put("Deraumere", deraumere);
-        base_ressource.put("Sibur", sibur);
-        base_ressource.put("Mendiane", mendiane);
-        base_ressource.put("Phiras", phiras);
-        base_ressource.put("Thystame", thystame);
-        base_ressource.put("Food", food);
-        Player player1 = new Player(0, 10, 123, "Team1", Orientation.NORTH, base_ressource);
-        Player player2 = new Player(0, 10, 124, "Team1", Orientation.SOUTH, base_ressource);
-
-        List<Player> players = new ArrayList<Player>();
-        players.add(player1);
-        players.add(player2);
-        int sizeX = 10;
-        int sizeY = 10;
-        this.worldMap = new WorldMap(sizeX, sizeY);
-        for (int y = 0; y <= sizeY; y++)
-        {
-            for (int x = 0; x <= sizeX; x++)
-            {
-                this.worldMap.getTiles().add(new Tile(x, y, base_ressource, players));
+        System.out.println("World Map initialisation");
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < y; j++) {
+                int firnb = (int) (Math.random() * 4);
+                Map<String, Ressource> base_ressource = new HashMap<String, Ressource>(); 
+                    Linemate linemate = new Linemate((int)(Math.random() * 7 ));
+                    Deraumere deraumere = new Deraumere((int)(Math.random() * 7 ));
+                    Sibur sibur = new Sibur((int)(Math.random() * 7 ));
+                    base_ressource.put("Linemate", linemate);
+                    base_ressource.put("Deraumere", deraumere);
+                    base_ressource.put("Sibur", sibur);
+                    Mendiane mendiane = new Mendiane((int)(Math.random() * 7 ));
+                    Phiras phiras = new Phiras((int)(Math.random() * 7 ));
+                    Thystame thystame = new Thystame((int)(Math.random() * 7 ));
+                    base_ressource.put("Mendiane", mendiane);
+                    base_ressource.put("Phiras", phiras);
+                    base_ressource.put("Thystame", thystame);
+                    Food food = new Food((int)(Math.random()*6));
+                    base_ressource.put("Food", food);
+                    LTile.add(new Tile(i,j,base_ressource));   
             }
         }
-        System.out.println("World Map initialisation");
+        this.worldMap.setTiles(LTile);
+        for (int i = 0; i < LTile.size(); i++) {
+            System.out.println(this.worldMap.getTiles().get(i).getX());
+            System.out.println(this.worldMap.getTiles().get(i).getY());
+            this.worldMap.getTiles().get(i).displayRessources(false);
+        }
+            
     }
 
     public Command createCommand(String command, int socketId)

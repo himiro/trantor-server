@@ -6,6 +6,7 @@ public class Trantor {
         Parser Pars = new Parser(args);
         Server serv = new Server(4242, Pars);
         serv.open();
+
         /*Linemate linemate = new Linemate();
         Deraumere deraumere = new Deraumere();
         Sibur sibur = new Sibur();
@@ -30,7 +31,7 @@ public class Trantor {
         teams.add(team1);
         teams.add(team2);
 
-        Controller controller = new Controller(teams, 100);
+
 
         Player player1 = new Player(10, 10, 123, team1.getTeamName(), Orientation.NORTH, base_ressource);
         Player player2 = new Player(0, 0, 124, team1.getTeamName(), Orientation.SOUTH, base_ressource);
@@ -59,21 +60,21 @@ public class Trantor {
         Command takeCmd = controller.createCommand("Take Thystame", 126);
         Command takeCmd = controller.createCommand("Take Mendiane", 126);
         Command takeCmd = controller.createCommand("Take Deraumere", 126);*/
-        Command setCmd = controller.createCommand("Set Food", 126);
+        //Command setCmd = controller.createCommand("Set Food", 126);
         /*Command setCmd = controller.createCommand("Set Linemate", 126);
         Command setCmd = controller.createCommand("Set Sibur", 126);
         Command setCmd = controller.createCommand("Set Phiras", 126);
         Command setCmd = controller.createCommand("Set Thystame", 126);
         Command setCmd = controller.createCommand("Set Mendiane", 126);
         Command setCmd = controller.createCommand("Set Deraumere", 126);*/
-        Command lookCmd = controller.createCommand("Look", 126);
-        Command broadcastCmd = controller.createCommand("Broadcast blah blah", 126);
-        Command incantationCmd = controller.createCommand("Incantation", 126);
-        Command forkCmd = controller.createCommand("Fork", 126);
+        //Command lookCmd = controller.createCommand("Look", 126);
+        //Command broadcastCmd = controller.createCommand("Broadcast blah blah", 126);
+        //Command incantationCmd = controller.createCommand("Incantation", 126);
+        //Command forkCmd = controller.createCommand("Fork", 126);
         //Plus de 10 commandes
-        controller.createCommand("Forward", 126);
-        controller.createCommand("Broadcast dezio edjzio", 126);
-        Command falseCmd = controller.createCommand("False", 126);
+        //controller.createCommand("Forward", 126);
+        //controller.createCommand("Broadcast dezio edjzio", 126);
+        //Command falseCmd = controller.createCommand("False", 126);
 
         /*System.out.println("\n\n\n");
         System.out.println("TIMELINE : ");
@@ -96,7 +97,7 @@ public class Trantor {
             controller.isActionFinished(takeCmd);
             controller.isActionFinished(setCmd);
             controller.isActionFinished(lookCmd);
-        }
+        }*/
 
     }
 }
