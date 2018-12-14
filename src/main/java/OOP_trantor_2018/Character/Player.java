@@ -128,6 +128,8 @@ class Player extends Character
 
   public void feed()
   {
+    int nb = this.getInventory().get("Food").getNb();
+    this.getInventory().get("Food").setNb(--nb);
     System.out.println("Player feed");
   }
 
@@ -211,9 +213,9 @@ class Player extends Character
     }
   }
 
-  public void look()
+  public void look(Tile tile, boolean last)
   {
-    System.out.println("Player looked around");
+    tile.displayRessources(last);
   }
 
   public void inventory()
@@ -258,7 +260,7 @@ class Player extends Character
     System.out.println("Players are doing some magic stuff");
   }
 
-  public void reproduct()
+  public void fork()
   {
     System.out.println("Player reproducted");
   }

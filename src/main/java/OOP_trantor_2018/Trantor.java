@@ -64,10 +64,10 @@ public class Trantor {
         Command setCmd = controller.createCommand("Set Thystame", 126);
         Command setCmd = controller.createCommand("Set Mendiane", 126);
         Command setCmd = controller.createCommand("Set Deraumere", 126);*/
-        Command broadcastCmd = controller.createCommand("Broadcast blah blah", 126);
-        Command forkCmd = controller.createCommand("Fork", 126);
-        Command incantationCmd = controller.createCommand("Incantation", 126);
         Command lookCmd = controller.createCommand("Look", 126);
+        Command broadcastCmd = controller.createCommand("Broadcast blah blah", 126);
+        Command incantationCmd = controller.createCommand("Incantation", 126);
+        Command forkCmd = controller.createCommand("Fork", 126);
         //Plus de 10 commandes
         controller.createCommand("Forward", 126);
         controller.createCommand("Broadcast dezio edjzio", 126);
@@ -93,6 +93,7 @@ public class Trantor {
             controller.isActionFinished(ejectCmd);
             controller.isActionFinished(takeCmd);
             controller.isActionFinished(setCmd);
+            controller.isActionFinished(lookCmd);
         }
 
     }

@@ -5,16 +5,15 @@ class Controller
     protected Timeline timeline;
     protected WorldMap worldMap;
     protected List<Team> teams = new ArrayList<Team>();
-    protected int maxPlayerPerTeam;
 
-    //debug
     Controller(List<Team> teams, int frequence)
     {
         this.timeline = new Timeline(frequence);
-        this.initWorldMap();
         this.teams = teams;
+        this.initWorldMap();
     }
 
+    //debug
     Controller(int frequence)
     {
         this.timeline = new Timeline(frequence);
@@ -76,24 +75,6 @@ class Controller
         this.teams = teams;
     }
 
-    /**
-    * Returns value of maxPlayerPerTeam
-    * @return
-    */
-    public int getMaxPlayerPerTeam()
-    {
-        return this.maxPlayerPerTeam;
-    }
-
-    /**
-    * Sets new value of maxPlayerPerTeam
-    * @param
-    */
-    public void setMaxPlayerPerTeam(int maxPlayerPerTeam)
-    {
-        this.maxPlayerPerTeam = maxPlayerPerTeam;
-    }
-
     public void initWorldMap()
     {
         //Creation et initialisation de l'objet Map
@@ -101,11 +82,11 @@ class Controller
 
         //debug
         Map<String, Ressource> base_ressource = new HashMap<String, Ressource>();
-        Linemate linemate = new Linemate();
+        Linemate linemate = new Linemate(2);
         Deraumere deraumere = new Deraumere();
-        Sibur sibur = new Sibur();
-        Mendiane mendiane = new Mendiane();
-        Phiras phiras = new Phiras();
+        Sibur sibur = new Sibur(4);
+        Mendiane mendiane = new Mendiane(-1);
+        Phiras phiras = new Phiras(32);
         Thystame thystame = new Thystame();
         Food food = new Food();
         base_ressource.put("Linemate", linemate);
@@ -255,7 +236,7 @@ class Controller
             cmd.getPlayer().left();
             break;
             case "Look":
-            System.out.println("Look");
+            this.lookTiles(cmd.getPlayer());
             break;
             case "Inventory":
             cmd.getPlayer().inventory();
@@ -290,6 +271,21 @@ class Controller
             }
             break;
         }
+    }
+
+    public void lookTiles(Player player)
+    {
+        System.out.println("Player looked around");
+        System.out.print("[");
+        //int middle = /* x if NORTH or SOUTH */;
+        //int middle = /* y if EAST or WEST */;
+        //for (int x = /* tile coordinate player*/; x < /* tile coordinate player + vision*/; i++)
+        //{
+        //    System.out.println("Tile seen : " + /*tile x, tile y*/);
+        Tile tile = this.worldMap.getTileByCoordinates(0, 0);
+        player.look(tile, false);
+        //    }
+        System.out.println("]");
     }
 
 }
