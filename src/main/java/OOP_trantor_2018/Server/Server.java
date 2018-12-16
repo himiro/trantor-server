@@ -34,7 +34,7 @@ public class Server {
                 while(isRunning == true){
                     try {
                         Socket client = server.accept();
-                        Thread thr = new Thread(new ClientProcessor(client, Parser));
+                        Thread thr = new Thread(new ClientProcessor(client, Parser, Control));
                         thr.start();
                     } catch (IOException e) {
                         e.printStackTrace();
