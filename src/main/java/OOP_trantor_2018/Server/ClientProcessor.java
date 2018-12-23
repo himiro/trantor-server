@@ -13,12 +13,19 @@ public class ClientProcessor implements Runnable {
     private Parser Parser;
     private boolean closeConnexion = false;
     private Controller control;
+    protected int nbSocket;
 
-    public ClientProcessor(Socket pSock, Parser Pars, Controller pControl)
+    public ClientProcessor(Socket pSock, Parser Pars, Controller pControl, int nbSocket)
     {
         this.sock = pSock;
         this.Parser = Pars;
         this.control = pControl;
+        this.nbSocket = nbSocket;
+    }
+
+    public int getNbSocket()
+    {
+        return this.nbSocket;
     }
 
     public void run()
@@ -34,7 +41,7 @@ public class ClientProcessor implements Runnable {
 
                 response = read();
                 System.out.println(Thread.currentThread().getName() + " : " + response);
-                toSend = pars_command(response);
+                toSend = pars_command(response.substring(0, 1).toUpperCase() + response.substring(1));
                 writer.write(toSend);
                 writer.flush();
 
@@ -82,13 +89,18 @@ public class ClientProcessor implements Runnable {
             writer.write(toSend);
             writer.flush(   );
             response = read();
+            response = response.substring(0, response.length() - 1);
             tmp = Parser.getTeams();
             for (int i = 0; i < tmp.size(); i++) {
                 temp = tmp.get(i);
-                if (response == temp.getTeamName()) {
+                if (response.equals(temp.getTeamName())) {
                     if ((nbClient = temp.getNbClients()) != 0) {
-                        nbClient-=1;
-                        temp.setNbClients(nbClient);
+                        Map<String, Ressource> inventory = this.createInventory();
+                        if (this.createPlayer(response, inventory) == true)
+                        {
+                            nbClient-=1;
+                            temp.setNbClients(nbClient);
+                        }
                     }
                 }
             }
@@ -107,26 +119,80 @@ public class ClientProcessor implements Runnable {
         }
     }
 
+
+    public Map<String, Ressource> createInventory()
+    {
+        Linemate linemate = new Linemate();
+        Deraumere deraumere = new Deraumere();
+        Sibur sibur = new Sibur();
+        Mendiane mendiane = new Mendiane();
+        Phiras phiras = new Phiras();
+        Thystame thystame = new Thystame();
+        Food food = new Food();
+
+        Map<String, Ressource> base_ressource = new HashMap<String, Ressource>();
+        base_ressource.put("Linemate", linemate);
+        base_ressource.put("Deraumere", deraumere);
+        base_ressource.put("Sibur", sibur);
+        base_ressource.put("Mendiane", mendiane);
+        base_ressource.put("Phiras", phiras);
+        base_ressource.put("Thystame", thystame);
+        base_ressource.put("Food", food);
+
+        return base_ressource;
+    }
+
+    public boolean createPlayer(String teamName, Map<String, Ressource> inventory)
+    {
+        System.out.println(this.Parser.getTeams().get(0).getTeamName());
+
+        List<Team> teams = this.Parser.getTeams();
+
+        for (Team team : teams)
+        {
+            if (team.getTeamName().equals(teamName) && team.getNbClients() > 0)
+            {
+                Random r = new Random();
+                team.getPlayers().add(new Player(r.nextInt(11), r.nextInt(11), this.nbSocket, teamName, Orientation.getRandomOrientation(), inventory));
+                control.setTeams(teams);
+                return true;
+            }
+        }
+        return false;
+    }
+
     private String pars_command(String cmd)
     {
-        String[] tab1 = {"Forward\n","Left\n","Right\n","Broadcast text\n","Fork\n"};
-        String[] tab2 = {"Look\n","Inventory\n","Connect_nbr\n","Eject\n","Incantation\n"};
         String toSend = "ko\n";
         boolean isValidCommand = false;
         Command newCmd;
         Timeline time;
 
-        for (int i = 0; i < 5; i++) {
-            if (tab1[i].equals(cmd) || cmd.startsWith("Take ") || cmd.startsWith("Drop ")) {
+        switch(cmd)
+        {
+            case "Forward\n":
+            case "Left\n":
+            case "Right\n":
+            case "Fork\n":
+            toSend = "ok\n";
+            isValidCommand = true;
+            case "Look\n":
+            case "Inventory\n":
+            case "Connect_nbr\n":
+            case "Eject\n":
+            case "Incantation\n":
+            isValidCommand = true;
+            default:
+            if (cmd.startsWith("Take ") || cmd.startsWith("Set ") || cmd.startsWith("Broadcast "))
+            {
                 toSend = "ok\n";
-                isValidCommand = true;
-            } else if (tab2[i].equals(cmd)) {
                 isValidCommand = true;
             }
         }
         if (isValidCommand) {
             System.out.println("Commande valide!");
-            newCmd = this.control.createCommand(cmd,Integer.parseInt(this.sock.toString()));
+            cmd = cmd.substring(0, cmd.length() - 1);
+            newCmd = this.control.createCommand(cmd, this.nbSocket);
             time = this.control.getTimeline();
             time.addCommand(newCmd);
             if (time.getCommands() != null) {
@@ -139,4 +205,5 @@ public class ClientProcessor implements Runnable {
         }
         return toSend;
     }
+
 }

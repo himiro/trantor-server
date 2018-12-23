@@ -3,6 +3,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.*;
 
 public class Server {
     private int port = 4242;
@@ -11,6 +12,7 @@ public class Server {
     private boolean isRunning = true;
     private Parser Parser;
     private Controller Control;
+    protected int nbSocket = 0;
 
     public Server(int pPort, Parser pars)
     {
@@ -23,8 +25,7 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Controller controller = new Controller(Parser);
-        Control = controller;
+        Control = new Controller(Parser);
     }
 
     public void open()
@@ -34,7 +35,7 @@ public class Server {
                 while(isRunning == true){
                     try {
                         Socket client = server.accept();
-                        Thread thr = new Thread(new ClientProcessor(client, Parser, Control));
+                        Thread thr = new Thread(new ClientProcessor(client, Parser, Control, ++nbSocket));
                         thr.start();
                     } catch (IOException e) {
                         e.printStackTrace();
