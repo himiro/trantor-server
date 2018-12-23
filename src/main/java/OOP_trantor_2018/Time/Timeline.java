@@ -61,9 +61,9 @@ class Timeline
     {
       endDate = new Date(System.currentTimeMillis() + ((COMMAND_TIME.get(command.getName()) * 10000) / this.getFrequence()));
     }
-
     System.out.println("Après : " + endDate);
     command.setEnd(endDate);
+
     for (int i = 0; i < this.commands.size(); i++)
     {
       if (command.getEnd().getTime() < this.commands.get(i).getEnd().getTime())

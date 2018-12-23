@@ -194,7 +194,7 @@ public class ClientProcessor implements Runnable {
             cmd = cmd.substring(0, cmd.length() - 1);
             newCmd = this.control.createCommand(cmd, this.nbSocket);
             time = this.control.getTimeline();
-            time.addCommand(newCmd);
+            control.addCommand(newCmd);
             if (time.getCommands() != null) {
                 for (int i = 0; i < time.getCommands().size(); i++) {
                     if (this.control.isActionFinished(time.getCommands().get(i))) {
