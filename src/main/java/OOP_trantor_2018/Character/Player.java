@@ -120,14 +120,15 @@ class Player extends Character
     this.queue = queue;
   }
 
-  public void feed()
+  public boolean feed()
   {
     int nb = this.getInventory().get("Food").getNb();
     this.getInventory().get("Food").setNb(--nb);
     System.out.println("Player feed");
+    return true;
   }
 
-  public void forward(int sizeX, int sizeY)
+  public boolean forward(int sizeX, int sizeY)
   {
     switch (this.orientation)
     {
@@ -159,9 +160,10 @@ class Player extends Character
       break;
     }
     System.out.println("X : " + this.x + " Y : " + this.y);
+    return true;
   }
 
-  public void left()
+  public boolean left()
   {
     switch (this.orientation)
     {
@@ -182,9 +184,10 @@ class Player extends Character
       System.out.println("Player turn East");
       break;
     }
+    return true;
   }
 
-  public void right()
+  public boolean right()
   {
     switch (this.orientation)
     {
@@ -205,25 +208,28 @@ class Player extends Character
       System.out.println("Player turn West");
       break;
     }
+    return true;
   }
 
-  public void look(Tile tile)
+  public String look(Tile tile)
   {
-    tile.displayRessources();
+    return tile.displayRessources();
   }
 
-  public void inventory()
+  public boolean inventory()
   {
     System.out.println("food " + this.inventory.get("Food").getNb() + ", linemate " + this.inventory.get("Linemate").getNb() + ", deraumere " + this.inventory.get("Deraumere").getNb() + ", sibur " + this.inventory.get("Sibur").getNb()
     + ", mendiane " + this.inventory.get("Mendiane").getNb() + ", phiras " + this.inventory.get("Phiras").getNb() + ", thystame " + this.inventory.get("Thystame").getNb());
+    return true;
   }
 
-  public void broadcast()
+  public boolean broadcast()
   {
     System.out.println("Player make a sound");
+    return true;
   }
 
-  public void take(Tile tile, String object)
+  public boolean take(Tile tile, String object)
   {
     int nbPlayer = this.getInventory().get(object).getNb();
     int nbTile = tile.getRessources().get(object).getNb();
@@ -233,10 +239,12 @@ class Player extends Character
       this.getInventory().get(object).setNb(++nbPlayer);
       System.out.println("Player took " + tile.getRessources().get(object).getName() + ".There is " + tile.getRessources().get(object).getNb() + " last on the tile");
       System.out.println("Player took " + tile.getRessources().get(object).getName() + ".He has " + this.getInventory().get(object).getNb() + " in his inventory");
+      return true;
     }
+    return false;
   }
 
-  public void set(Tile tile, String object)
+  public boolean set(Tile tile, String object)
   {
     int nbPlayer = this.getInventory().get(object).getNb();
     int nbTile = tile.getRessources().get(object).getNb();
@@ -246,20 +254,24 @@ class Player extends Character
       this.getInventory().get(object).setNb(--nbPlayer);
       System.out.println("Player drop " + tile.getRessources().get(object).getName() + ".There is " + tile.getRessources().get(object).getNb() + " last on the tile");
       System.out.println("Player drop " + tile.getRessources().get(object).getName() + ".He has " + this.getInventory().get(object).getNb() + " in his inventory");
+      return true;
     }
+    return false;
   }
 
-  public void elevation()
+  public boolean elevation()
   {
     System.out.println("Players are doing some magic stuff");
+    return true;
   }
 
-  public void fork()
+  public boolean fork()
   {
     System.out.println("Player reproducted");
+    return true;
   }
 
-  public void eject(List<Player> players, int sizeX, int sizeY)
+  public boolean eject(List<Player> players, int sizeX, int sizeY)
   {
     if (players != null)
     {
@@ -292,6 +304,8 @@ class Player extends Character
         }
       }
       System.out.println("Player eject");
+      return true;
     }
+    return false;
   }
 }

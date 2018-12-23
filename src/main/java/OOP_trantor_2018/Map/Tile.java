@@ -109,7 +109,7 @@ class Tile
         this.egg = egg;
     }
 
-    public void displayRessources()
+    public String displayRessources()
     {
         boolean firstElement = true;
         String display = "";
@@ -123,6 +123,6 @@ class Tile
         }
         display = display.trim();
         display += ",";
-        System.out.print(display);
+        return display;
     }
 }

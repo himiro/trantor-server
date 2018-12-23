@@ -80,21 +80,21 @@ class Controller
             for (int j = 0; j < y; j++) {
                 int firnb = (int) (Math.random() * 4);
                 Map<String, Ressource> base_ressource = new HashMap<String, Ressource>();
-                    Linemate linemate = new Linemate((int)(Math.random() * 7 ));
-                    Deraumere deraumere = new Deraumere((int)(Math.random() * 7 ));
-                    Sibur sibur = new Sibur((int)(Math.random() * 7 ));
-                    base_ressource.put("Linemate", linemate);
-                    base_ressource.put("Deraumere", deraumere);
-                    base_ressource.put("Sibur", sibur);
-                    Mendiane mendiane = new Mendiane((int)(Math.random() * 7 ));
-                    Phiras phiras = new Phiras((int)(Math.random() * 7 ));
-                    Thystame thystame = new Thystame((int)(Math.random() * 7 ));
-                    base_ressource.put("Mendiane", mendiane);
-                    base_ressource.put("Phiras", phiras);
-                    base_ressource.put("Thystame", thystame);
-                    Food food = new Food((int)(Math.random()*6));
-                    base_ressource.put("Food", food);
-                    LTile.add(new Tile(i,j,base_ressource));
+                Linemate linemate = new Linemate((int)(Math.random() * 7 ));
+                Deraumere deraumere = new Deraumere((int)(Math.random() * 7 ));
+                Sibur sibur = new Sibur((int)(Math.random() * 7 ));
+                base_ressource.put("Linemate", linemate);
+                base_ressource.put("Deraumere", deraumere);
+                base_ressource.put("Sibur", sibur);
+                Mendiane mendiane = new Mendiane((int)(Math.random() * 7 ));
+                Phiras phiras = new Phiras((int)(Math.random() * 7 ));
+                Thystame thystame = new Thystame((int)(Math.random() * 7 ));
+                base_ressource.put("Mendiane", mendiane);
+                base_ressource.put("Phiras", phiras);
+                base_ressource.put("Thystame", thystame);
+                Food food = new Food((int)(Math.random()*6));
+                base_ressource.put("Food", food);
+                LTile.add(new Tile(i,j,base_ressource));
             }
         }
         this.worldMap.setTiles(LTile);
@@ -132,7 +132,7 @@ class Controller
         command = timeline.addCommand(command);
     }
 
-    public void removeCommand(Command command)
+    public boolean removeCommand(Command command)
     {
         //if action finished
         //remove the command from the timeline and check if another command is waiting in the player's queue
@@ -140,7 +140,7 @@ class Controller
         //execute
         this.timeline.getCommands().remove(command);
         System.out.println("Execute command : " + command.getName());
-        this.execute(command);
+        boolean ret = this.execute(command);
         if (command.getPlayer().getQueue().size() != 0)
         {
             this.pushCommandToTimeline(command.getPlayer().getQueue().peek());
@@ -149,6 +149,7 @@ class Controller
         {
             System.out.println("Any command left");
         }
+        return ret;
     }
 
     public void newTeam(String teamName)
@@ -194,6 +195,7 @@ class Controller
             {
                 if (tmp.getEnd().getTime() < currentDate.getTime())
                 {
+                    //move remove command to get the removeCommand return value and call removeCommand after called isActionFinished
                     this.removeCommand(tmp);
                     return true;
                 }
@@ -204,25 +206,24 @@ class Controller
     }
 
 
-    public void execute(Command cmd)
+    public boolean execute(Command cmd)
     {
         switch(cmd.getName())
         {
             case "Forward":
-            cmd.getPlayer().forward(this.worldMap.getSizeX(), this.worldMap.getSizeY());
-            break;
+            return (cmd.getPlayer().forward(this.worldMap.getSizeX(), this.worldMap.getSizeY()));
             case "Right":
-            cmd.getPlayer().right();
-            break;
+            return (cmd.getPlayer().right());
             case "Left":
-            cmd.getPlayer().left();
-            break;
+            return (cmd.getPlayer().left());
             case "Look":
-            this.lookTiles(cmd.getPlayer());
-            break;
+            if (this.lookTiles(cmd.getPlayer()) == null)
+            {
+                return false;
+            }
+            return true;
             case "Inventory":
-            cmd.getPlayer().inventory();
-            break;
+            return (cmd.getPlayer().inventory());
             case "Fork":
             System.out.println("Fork");
             break;
@@ -230,9 +231,9 @@ class Controller
             Tile ejectTile = this.worldMap.getTileByCoordinates(cmd.getPlayer().getX(), cmd.getPlayer().getY());
             if (ejectTile != null)
             {
-                cmd.getPlayer().eject(ejectTile.getPlayers(), this.worldMap.getSizeX(), this.worldMap.getSizeY());
+                return (cmd.getPlayer().eject(ejectTile.getPlayers(), this.worldMap.getSizeX(), this.worldMap.getSizeY()));
             }
-            break;
+            return false;
             case "Incantation":
             System.out.println("Incantation");
             break;
@@ -244,34 +245,44 @@ class Controller
             else if (cmd.getName().startsWith("Take ") == true)
             {
                 Tile takeTile = this.worldMap.getTileByCoordinates(cmd.getPlayer().getX(), cmd.getPlayer().getY());
-                cmd.getPlayer().take(takeTile, cmd.getName().substring(cmd.getName().lastIndexOf(' ') + 1));
+                if (takeTile != null)
+                {
+                    return (cmd.getPlayer().take(takeTile, cmd.getName().substring(cmd.getName().lastIndexOf(' ') + 1)));
+                }
+                return false;
             }
             else if (cmd.getName().startsWith("Set ") == true)
             {
-                Tile takeTile = this.worldMap.getTileByCoordinates(cmd.getPlayer().getX(), cmd.getPlayer().getY());
-                cmd.getPlayer().set(takeTile, cmd.getName().substring(cmd.getName().lastIndexOf(' ') + 1));
+                Tile setTile = this.worldMap.getTileByCoordinates(cmd.getPlayer().getX(), cmd.getPlayer().getY());
+                if (setTile != null)
+                {
+                    return (cmd.getPlayer().set(setTile, cmd.getName().substring(cmd.getName().lastIndexOf(' ') + 1)));
+                }
+                return false;
             }
-            break;
+            return false;
         }
+        return false;
     }
 
-    public void lookTiles(Player player)
+    public String lookTiles(Player player)
     {
-        System.out.println("Player looked around");
-        System.out.print("[");
         int x = player.getX();
         int y = player.getY();
         int length = 2;
         Tile tile = new Tile();
+        String res;
 
         tile = this.worldMap.getTileByCoordinates(player.getX(), player.getY());
-        player.look(tile);
+        System.out.println("Player looked around");
+        res = "[";
+        res = res + player.look(tile);
         while (y != (player.getY() + player.getVision()) % (this.worldMap.getSizeY()))
         {
             while (x != (player.getX() + length))
             {
                 tile = this.worldMap.getTileByCoordinates(x % this.worldMap.getSizeX(), y % this.worldMap.getSizeY());
-                player.look(tile);
+                res = res + player.look(tile);
                 x++;
             }
             if (player.getX() - length < 0)
@@ -292,7 +303,9 @@ class Controller
             }
             length++;
         }
-        System.out.println("]");
+        res = res + "]";
+        System.out.println(res);
+        return res;
     }
 
 }

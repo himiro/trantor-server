@@ -198,7 +198,7 @@ public class ClientProcessor implements Runnable {
             if (time.getCommands() != null) {
                 for (int i = 0; i < time.getCommands().size(); i++) {
                     if (this.control.isActionFinished(time.getCommands().get(i))) {
-                        System.out.println(newCmd.getName() + " is finish, removed from the stack");
+                        System.out.println(newCmd.getName() + " is finished, removed from the stack");
                     }
                 }
             }
