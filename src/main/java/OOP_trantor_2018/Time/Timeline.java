@@ -44,7 +44,7 @@ class Timeline
     //add command in the timeline + define endTime
     // + if player's queue !empty -> remove it from player's queue
     Date endDate = new Date(System.currentTimeMillis());
-    System.out.println("Avant : " + endDate);
+    System.out.println("Avant : " + endDate.getTime());
     if (command.getName().startsWith("Broadcast "))
     {
       endDate = new Date(System.currentTimeMillis() + ((COMMAND_TIME.get(command.getName().substring(0, 9)) * 10000) / this.getFrequence()));
@@ -61,7 +61,7 @@ class Timeline
     {
       endDate = new Date(System.currentTimeMillis() + ((COMMAND_TIME.get(command.getName()) * 10000) / this.getFrequence()));
     }
-    System.out.println("Après : " + endDate);
+    System.out.println("Après : " + endDate.getTime());
     command.setEnd(endDate);
 
     for (int i = 0; i < this.commands.size(); i++)

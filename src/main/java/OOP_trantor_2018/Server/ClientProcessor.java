@@ -38,12 +38,33 @@ public class ClientProcessor implements Runnable {
             reader = new BufferedInputStream(sock.getInputStream());
             init_connection();
             while(!sock.isClosed()) {
-
-                response = read();
-                System.out.println(Thread.currentThread().getName() + " : " + response);
-                toSend = pars_command(response.substring(0, 1).toUpperCase() + response.substring(1));
-                writer.write(toSend);
-                writer.flush();
+                if (reader.available() > 0)
+                {
+                    response = read();
+                    System.out.println(Thread.currentThread().getName() + " : " + response);
+                    toSend = pars_command(response.substring(0, 1).toUpperCase() + response.substring(1));
+                    writer.write(toSend);
+                    writer.flush();
+                }
+                else
+                {
+                    try
+                    {
+                        Timeline time = this.control.getTimeline();
+                        List<Command> commands = time.getCommands();
+                        if (commands != null && commands.size() > 0) {
+                            for (int i = 0; i < commands.size(); i++) {
+                                if (this.control.isActionFinished(commands.get(i))) {
+                                    System.out.println(commands.get(i) + " is finished, removed from the stack");
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        ;
+                    }
+                }
 
                 if(closeConnexion){
                     System.err.println("COMMANDE CLOSE DETECTEE ! ");
@@ -176,29 +197,30 @@ public class ClientProcessor implements Runnable {
             case "Fork\n":
             toSend = "ok\n";
             isValidCommand = true;
+            break;
             case "Look\n":
             case "Inventory\n":
             case "Connect_nbr\n":
             case "Eject\n":
             case "Incantation\n":
             isValidCommand = true;
+            break;
             default:
             if (cmd.startsWith("Take ") || cmd.startsWith("Set ") || cmd.startsWith("Broadcast "))
             {
                 toSend = "ok\n";
                 isValidCommand = true;
             }
+            break;
         }
         if (isValidCommand) {
-            System.out.println("Commande valide!");
             cmd = cmd.substring(0, cmd.length() - 1);
             newCmd = this.control.createCommand(cmd, this.nbSocket);
             time = this.control.getTimeline();
-            control.addCommand(newCmd);
             if (time.getCommands() != null) {
                 for (int i = 0; i < time.getCommands().size(); i++) {
                     if (this.control.isActionFinished(time.getCommands().get(i))) {
-                        System.out.println(newCmd.getName() + " is finished, removed from the stack");
+                        System.out.println(time.getCommands().get(i).getName() + " is finished, removed from the stack");
                     }
                 }
             }
