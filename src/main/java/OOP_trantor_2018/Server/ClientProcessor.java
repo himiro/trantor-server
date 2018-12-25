@@ -34,17 +34,16 @@ public class ClientProcessor implements Runnable {
         String toSend;
 
         try {
-            writer = new PrintWriter(sock.getOutputStream());
-            reader = new BufferedInputStream(sock.getInputStream());
+            this.writer = new PrintWriter(sock.getOutputStream());
+            this.reader = new BufferedInputStream(sock.getInputStream());
             init_connection();
             while(!sock.isClosed()) {
-                if (reader.available() > 0)
+                if (this.reader.available() > 0)
                 {
                     response = read();
                     System.out.println(Thread.currentThread().getName() + " : " + response);
-                    toSend = pars_command(response.substring(0, 1).toUpperCase() + response.substring(1));
-                    writer.write(toSend);
-                    writer.flush();
+                    response = response.toLowerCase();
+                    pars_command(response.substring(0, 1).toUpperCase() + response.substring(1));
                 }
                 else
                 {
@@ -52,10 +51,25 @@ public class ClientProcessor implements Runnable {
                     {
                         Timeline time = this.control.getTimeline();
                         List<Command> commands = time.getCommands();
+
                         if (commands != null && commands.size() > 0) {
                             for (int i = 0; i < commands.size(); i++) {
-                                if (this.control.isActionFinished(commands.get(i))) {
-                                    System.out.println(commands.get(i) + " is finished, removed from the stack");
+                                toSend = this.control.isActionFinished(commands.get(i));
+                                if (toSend != null && toSend != "nope")
+                                {
+                                    if (toSend.equals("true"))
+                                    {
+                                        this.writer.write("ok\n");
+                                    }
+                                    else if (toSend.equals("false"))
+                                    {
+                                        this.writer.write("ko\n");
+                                    }
+                                    else
+                                    {
+                                        this.writer.write(toSend);
+                                    }
+                                    this.writer.flush();
                                 }
                             }
                         }
@@ -68,8 +82,8 @@ public class ClientProcessor implements Runnable {
 
                 if(closeConnexion){
                     System.err.println("COMMANDE CLOSE DETECTEE ! ");
-                    writer = null;
-                    reader = null;
+                    this.writer = null;
+                    this.reader = null;
                     sock.close();
                 }
             }
@@ -87,7 +101,7 @@ public class ClientProcessor implements Runnable {
         String response = "";
         int stream;
         byte[] b = new byte[1024];
-        stream = reader.read(b);
+        stream = this.reader.read(b);
         if (stream == -1)
         this.closeConnexion = true;
         else
@@ -107,8 +121,8 @@ public class ClientProcessor implements Runnable {
 
         try {
             toSend = "WELCOME\n";
-            writer.write(toSend);
-            writer.flush(   );
+            this.writer.write(toSend);
+            this.writer.flush(   );
             response = read();
             response = response.substring(0, response.length() - 1);
             tmp = Parser.getTeams();
@@ -123,11 +137,17 @@ public class ClientProcessor implements Runnable {
                             temp.setNbClients(nbClient);
                         }
                     }
+                    else
+                    {
+                        this.writer = null;
+                        this.reader = null;
+                        sock.close();
+                    }
                 }
             }
             toSend = Integer.toString(nbClient) + "\n" + Integer.toString(Parser.getX()) + " " + Integer.toString(Parser.getX()) + "\n";
-            writer.write(toSend);
-            writer.flush();
+            this.writer.write(toSend);
+            this.writer.flush();
             remote = (InetSocketAddress)sock.getRemoteSocketAddress();
             debug = Thread.currentThread().getName() + " : Succesfully connected!\n";
             System.err.println("\n" + debug);
@@ -182,7 +202,7 @@ public class ClientProcessor implements Runnable {
         return false;
     }
 
-    private String pars_command(String cmd)
+    private void pars_command(String cmd)
     {
         String toSend = "ko\n";
         boolean isValidCommand = false;
@@ -192,15 +212,12 @@ public class ClientProcessor implements Runnable {
         switch(cmd)
         {
             case "Forward\n":
-            case "Left\n":
             case "Right\n":
-            case "Fork\n":
-            toSend = "ok\n";
-            isValidCommand = true;
-            break;
+            case "Left\n":
             case "Look\n":
             case "Inventory\n":
             case "Connect_nbr\n":
+            case "Fork\n":
             case "Eject\n":
             case "Incantation\n":
             isValidCommand = true;
@@ -208,24 +225,43 @@ public class ClientProcessor implements Runnable {
             default:
             if (cmd.startsWith("Take ") || cmd.startsWith("Set ") || cmd.startsWith("Broadcast "))
             {
-                toSend = "ok\n";
                 isValidCommand = true;
             }
             break;
         }
-        if (isValidCommand) {
+        if (isValidCommand)
+        {
             cmd = cmd.substring(0, cmd.length() - 1);
             newCmd = this.control.createCommand(cmd, this.nbSocket);
             time = this.control.getTimeline();
-            if (time.getCommands() != null) {
+            if (time.getCommands() != null)
+            {
                 for (int i = 0; i < time.getCommands().size(); i++) {
-                    if (this.control.isActionFinished(time.getCommands().get(i))) {
-                        System.out.println(time.getCommands().get(i).getName() + " is finished, removed from the stack");
+                    toSend = this.control.isActionFinished(time.getCommands().get(i));
+                    if (toSend != null && toSend != "nope")
+                    {
+                        if (toSend.equals("true"))
+                        {
+                            this.writer.write("ok\n");
+                        }
+                        else if (toSend.equals("false"))
+                        {
+                            this.writer.write("ko\n");
+                        }
+                        else
+                        {
+                            this.writer.write(toSend);
+                        }
+                        this.writer.flush();
                     }
                 }
             }
         }
-        return toSend;
+        else
+        {
+            this.writer.write("invalid command\n");
+            this.writer.flush();
+        }
     }
 
 }

@@ -120,15 +120,15 @@ class Player extends Character
     this.queue = queue;
   }
 
-  public boolean feed()
+  public String feed()
   {
     int nb = this.getInventory().get("Food").getNb();
     this.getInventory().get("Food").setNb(--nb);
     System.out.println("Player feed");
-    return true;
+    return "true";
   }
 
-  public boolean forward(int sizeX, int sizeY)
+  public String forward(int sizeX, int sizeY)
   {
     switch (this.orientation)
     {
@@ -160,10 +160,10 @@ class Player extends Character
       break;
     }
     System.out.println("X : " + this.x + " Y : " + this.y);
-    return true;
+    return "true";
   }
 
-  public boolean left()
+  public String left()
   {
     switch (this.orientation)
     {
@@ -184,10 +184,10 @@ class Player extends Character
       System.out.println("Player turn East");
       break;
     }
-    return true;
+    return "true";
   }
 
-  public boolean right()
+  public String right()
   {
     switch (this.orientation)
     {
@@ -208,7 +208,7 @@ class Player extends Character
       System.out.println("Player turn West");
       break;
     }
-    return true;
+    return "true";
   }
 
   public String look(Tile tile)
@@ -216,20 +216,19 @@ class Player extends Character
     return tile.displayRessources();
   }
 
-  public boolean inventory()
+  public String inventory()
   {
-    System.out.println("food " + this.inventory.get("Food").getNb() + ", linemate " + this.inventory.get("Linemate").getNb() + ", deraumere " + this.inventory.get("Deraumere").getNb() + ", sibur " + this.inventory.get("Sibur").getNb()
-    + ", mendiane " + this.inventory.get("Mendiane").getNb() + ", phiras " + this.inventory.get("Phiras").getNb() + ", thystame " + this.inventory.get("Thystame").getNb());
-    return true;
+    return ("food " + this.inventory.get("Food").getNb() + ", linemate " + this.inventory.get("Linemate").getNb() + ", deraumere " + this.inventory.get("Deraumere").getNb() + ", sibur " + this.inventory.get("Sibur").getNb()
+    + ", mendiane " + this.inventory.get("Mendiane").getNb() + ", phiras " + this.inventory.get("Phiras").getNb() + ", thystame " + this.inventory.get("Thystame").getNb() + "\n");
   }
 
-  public boolean broadcast()
+  public String broadcast()
   {
     System.out.println("Player make a sound");
-    return true;
+    return "true";
   }
 
-  public boolean take(Tile tile, String object)
+  public String take(Tile tile, String object)
   {
     int nbPlayer = this.getInventory().get(object).getNb();
     int nbTile = tile.getRessources().get(object).getNb();
@@ -239,12 +238,12 @@ class Player extends Character
       this.getInventory().get(object).setNb(++nbPlayer);
       System.out.println("Player took " + tile.getRessources().get(object).getName() + ".There is " + tile.getRessources().get(object).getNb() + " last on the tile");
       System.out.println("Player took " + tile.getRessources().get(object).getName() + ".He has " + this.getInventory().get(object).getNb() + " in his inventory");
-      return true;
+      return "true";
     }
-    return false;
+    return "false";
   }
 
-  public boolean set(Tile tile, String object)
+  public String set(Tile tile, String object)
   {
     int nbPlayer = this.getInventory().get(object).getNb();
     int nbTile = tile.getRessources().get(object).getNb();
@@ -254,24 +253,24 @@ class Player extends Character
       this.getInventory().get(object).setNb(--nbPlayer);
       System.out.println("Player drop " + tile.getRessources().get(object).getName() + ".There is " + tile.getRessources().get(object).getNb() + " last on the tile");
       System.out.println("Player drop " + tile.getRessources().get(object).getName() + ".He has " + this.getInventory().get(object).getNb() + " in his inventory");
-      return true;
+      return "true";
     }
-    return false;
+    return "false";
   }
 
-  public boolean elevation()
+  public String elevation()
   {
     System.out.println("Players are doing some magic stuff");
-    return true;
+    return "true";
   }
 
-  public boolean fork()
+  public String fork()
   {
     System.out.println("Player reproducted");
-    return true;
+    return "true";
   }
 
-  public boolean eject(List<Player> players, int sizeX, int sizeY)
+  public String eject(List<Player> players, int sizeX, int sizeY)
   {
     if (players != null)
     {
@@ -304,8 +303,8 @@ class Player extends Character
         }
       }
       System.out.println("Player eject");
-      return true;
+      return "true";
     }
-    return false;
+    return "false";
   }
 }

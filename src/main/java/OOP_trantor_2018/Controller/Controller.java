@@ -132,7 +132,7 @@ class Controller
         command = timeline.addCommand(command);
     }
 
-    public boolean removeCommand(Command command)
+    public String removeCommand(Command command)
     {
         //if action finished
         //remove the command from the timeline and check if another command is waiting in the player's queue
@@ -140,7 +140,7 @@ class Controller
         //execute
         this.timeline.getCommands().remove(command);
         System.out.println("Execute command : " + command.getName());
-        boolean ret = this.execute(command);
+        String ret = this.execute(command);
         if (command.getPlayer().getQueue().size() != 0)
         {
             this.pushCommandToTimeline(command.getPlayer().getQueue().peek());
@@ -184,7 +184,7 @@ class Controller
         return null;
     }
 
-    public boolean isActionFinished(Command command)
+    public String isActionFinished(Command command)
     {
         //go through timeline if currentdate > endDate call remove command
         Date currentDate = new Date(System.currentTimeMillis());
@@ -196,17 +196,17 @@ class Controller
                 if (tmp.getEnd().getTime() < currentDate.getTime())
                 {
                     //move remove command to get the removeCommand return value and call removeCommand after called isActionFinished
-                    this.removeCommand(tmp);
-                    return true;
+                    String ret = this.removeCommand(tmp);
+                    return (ret);
                 }
-                return false;
+                return "nope";
             }
         }
-        return false;
+        return null;
     }
 
 
-    public boolean execute(Command cmd)
+    public String execute(Command cmd)
     {
         switch(cmd.getName())
         {
@@ -217,11 +217,7 @@ class Controller
             case "Left":
             return (cmd.getPlayer().left());
             case "Look":
-            if (this.lookTiles(cmd.getPlayer()) == null)
-            {
-                return false;
-            }
-            return true;
+            return (this.lookTiles(cmd.getPlayer()));
             case "Inventory":
             return (cmd.getPlayer().inventory());
             case "Fork":
@@ -233,9 +229,19 @@ class Controller
             {
                 return (cmd.getPlayer().eject(ejectTile.getPlayers(), this.worldMap.getSizeX(), this.worldMap.getSizeY()));
             }
-            return false;
+            return "false";
             case "Incantation":
             System.out.println("Incantation");
+            break;
+            case "Connect_nbr":
+            for (int i = 0; i < this.teams.size(); i++)
+            {
+                if (this.teams.get(i).getTeamName().equals(cmd.getPlayer().getTeamName()))
+                {
+                    return (Integer.toString(this.teams.get(i).getNbClients()) + "\n");
+                }
+                return "false";
+            }
             break;
             default:
             if (cmd.getName().startsWith("Broadcast ") == true)
@@ -249,7 +255,7 @@ class Controller
                 {
                     return (cmd.getPlayer().take(takeTile, cmd.getName().substring(cmd.getName().lastIndexOf(' ') + 1)));
                 }
-                return false;
+                return "false";
             }
             else if (cmd.getName().startsWith("Set ") == true)
             {
@@ -258,11 +264,11 @@ class Controller
                 {
                     return (cmd.getPlayer().set(setTile, cmd.getName().substring(cmd.getName().lastIndexOf(' ') + 1)));
                 }
-                return false;
+                return "false";
             }
-            return false;
+            return "false";
         }
-        return false;
+        return "false";
     }
 
     public String lookTiles(Player player)
@@ -303,7 +309,7 @@ class Controller
             }
             length++;
         }
-        res = res + "]";
+        res = res + "]\n";
         System.out.println(res);
         return res;
     }
