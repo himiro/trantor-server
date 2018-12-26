@@ -113,12 +113,10 @@ class Controller
     {
         //If player's queue !empty : add command to the player.
         //Else : add command to the timeline
-        if (command.getPlayer().getQueue().size() == 0 && timeline.isCommandFromPlayer(command) == false)
-        {
+        if (command.getPlayer().getQueue().size() == 0 && timeline.isCommandFromPlayer(command) == false) {
             command = timeline.addCommand(command);
         }
-        else
-        {
+        else {
             if (command.getPlayer().getQueue().size() < 10)
             {
                 command.getPlayer().getQueue().add(command);
