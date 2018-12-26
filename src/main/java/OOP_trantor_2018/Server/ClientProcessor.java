@@ -59,7 +59,8 @@ public class ClientProcessor implements Runnable {
                     }
                     else
                     {
-                        pars_command_player(response.substring(0, 1).toUpperCase() + response.substring(1));
+                        if (response != null)
+                            pars_command_player(response.substring(0, 1).toUpperCase() + response.substring(1));
                     }
                 }
                 else
@@ -441,7 +442,8 @@ public class ClientProcessor implements Runnable {
         if (isValidCommand)
         {
             cmd = cmd.substring(0, cmd.length() - 1);
-            this.control.createCommand(cmd, this.nbSocket);
+            if (control != null || cmd != null)
+                this.control.createCommand(cmd, this.nbSocket);
             time = this.control.getTimeline();
             if (time.getCommands() != null)
             {

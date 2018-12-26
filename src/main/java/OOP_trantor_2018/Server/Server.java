@@ -43,18 +43,8 @@ public class Server {
                         e.printStackTrace();
                     }
                 }
-                try {
-                    server.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    server = null;
-                }
             }
         });
         thr.start();
-    }
-
-    public void close(){
-        isRunning = false;
     }
 }
