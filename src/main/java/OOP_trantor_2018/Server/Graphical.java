@@ -5,6 +5,7 @@ class Graphical
 {
     protected Controller controller;
     protected PrintWriter writer;
+    protected List<PrintWriter> graphicals = new ArrayList<PrintWriter>();
 
     Graphical(Controller controller, PrintWriter writer)
     {
@@ -20,6 +21,21 @@ class Graphical
     public PrintWriter getWriter()
     {
         return (this.writer);
+    }
+
+    public void setWriter(PrintWriter writer)
+    {
+        this.writer = writer;
+    }
+
+    public List<PrintWriter> getGraphicals()
+    {
+        return (this.graphicals);
+    }
+
+    public void setGraphicals(List<PrintWriter> graphicals)
+    {
+        this.graphicals = graphicals;
     }
 
     public boolean contentOfTile(int x, int y, boolean all)
@@ -67,5 +83,16 @@ class Graphical
         buff.deleteCharAt(buff.length() - 1);
         this.writer.println(buff);
         this.writer.flush();
+    }
+
+    public void writeToGraphical(String message)
+    {
+        System.out.println("ICI : " + this.graphicals.size());
+        for (PrintWriter graphical : this.graphicals)
+        {
+            System.out.println(message);
+            graphical.println(message);
+            graphical.flush();
+        }
     }
 }

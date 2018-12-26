@@ -18,12 +18,13 @@ public class ClientProcessor implements Runnable {
     protected boolean isGraphical = false;
     protected Graphical graphical;
 
-    public ClientProcessor(Socket pSock, Parser Pars, Controller pControl, int nbSocket)
+    public ClientProcessor(Socket pSock, Parser Pars, Controller pControl, int nbSocket, Graphical graphical)
     {
         this.sock = pSock;
         this.Parser = Pars;
         this.control = pControl;
         this.nbSocket = nbSocket;
+        this.graphical = graphical;
     }
 
     public int getNbSocket()
@@ -44,6 +45,7 @@ public class ClientProcessor implements Runnable {
         try {
             this.writer = new PrintWriter(sock.getOutputStream());
             this.reader = new BufferedInputStream(sock.getInputStream());
+            this.graphical.setWriter(this.writer);
             init_connection();
             while(!sock.isClosed()) {
                 if (this.reader.available() > 0)
@@ -53,7 +55,6 @@ public class ClientProcessor implements Runnable {
                     response = response.toLowerCase();
                     if (this.isGraphical == true)
                     {
-                        this.graphical = new Graphical(this.control, this.writer);
                         pars_command_graphical(response);
                     }
                     else
@@ -68,7 +69,9 @@ public class ClientProcessor implements Runnable {
                         Timeline time = this.control.getTimeline();
                         List<Command> commands = time.getCommands();
 
-                        if (commands != null && commands.size() > 0) {
+                        if (commands != null && commands.size() > 0)
+                        {
+                            //Faire fonction pour éviter duplication de code
                             for (int i = 0; i < commands.size(); i++) {
                                 toSend = this.control.isActionFinished(commands.get(i));
                                 if (toSend != null && toSend != "nope")
@@ -89,6 +92,7 @@ public class ClientProcessor implements Runnable {
                                 }
                             }
                         }
+                        //Faire fonction pour éviter duplication de code
                         List<Team> teams = this.Parser.getTeams();
 
                         for (Team team : teams)
@@ -173,6 +177,7 @@ public class ClientProcessor implements Runnable {
             if (response.equals("GRAPHICAL"))
             {
                 this.isGraphical = true;
+                this.graphical.getGraphicals().add(this.writer);
             }
             else
             {
@@ -258,8 +263,11 @@ public class ClientProcessor implements Runnable {
             if (team.getTeamName().equals(teamName) && team.getNbClients() > 0)
             {
                 Random r = new Random();
-                team.getPlayers().add(new Player(r.nextInt(this.Parser.getX()), r.nextInt(this.Parser.getY() + 1), this.nbSocket, teamName, Orientation.getRandomOrientation(), inventory, this.control.getTimeline().getFrequence()));
+                Player player = new Player(r.nextInt(this.Parser.getX()), r.nextInt(this.Parser.getY() + 1), this.nbSocket, teamName, Orientation.getRandomOrientation(), inventory, this.control.getTimeline().getFrequence());
+                team.getPlayers().add(player);
                 control.setTeams(teams);
+                this.graphical.writeToGraphical("pnw #" + player.getId() + " " + player.getX() + " " + player.getY() + " " + Orientation.toString(player.getOrientation()) + " " + player.getLevel() + " " + team.getTeamName());
+
                 return true;
             }
         }
@@ -297,7 +305,7 @@ public class ClientProcessor implements Runnable {
             default:
             break;
         }
-        if (valid == false)
+        if (valid == false && cmd.length() > 4)
         {
             switch (cmd.substring(0, 4))
             {
@@ -437,6 +445,7 @@ public class ClientProcessor implements Runnable {
             time = this.control.getTimeline();
             if (time.getCommands() != null)
             {
+                //Faire fonction pour éviter duplication de code
                 for (int i = 0; i < time.getCommands().size(); i++)
                 {
                     toSend = this.control.isActionFinished(time.getCommands().get(i));
@@ -458,6 +467,7 @@ public class ClientProcessor implements Runnable {
                         this.writer.flush();
                     }
                 }
+                //Faire fonction pour éviter duplication de code
                 List<Team> teams = this.Parser.getTeams();
 
                 for (Team team : teams)

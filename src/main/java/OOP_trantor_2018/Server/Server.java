@@ -13,6 +13,7 @@ public class Server {
     private Parser Parser;
     private Controller Control;
     protected int nbSocket = 0;
+    protected Graphical graphical;
 
     public Server(int pPort, Parser pars)
     {
@@ -26,6 +27,7 @@ public class Server {
             e.printStackTrace();
         }
         Control = new Controller(Parser);
+        this.graphical = new Graphical(this.Control, null);
     }
 
     public void open()
@@ -35,7 +37,7 @@ public class Server {
                 while(isRunning == true){
                     try {
                         Socket client = server.accept();
-                        Thread thr = new Thread(new ClientProcessor(client, Parser, Control, ++nbSocket));
+                        Thread thr = new Thread(new ClientProcessor(client, Parser, Control, ++nbSocket, graphical));
                         thr.start();
                     } catch (IOException e) {
                         e.printStackTrace();
