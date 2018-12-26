@@ -9,15 +9,17 @@ class Player extends Character
   protected static int nb = 1;
   protected int id;
   protected Queue<Command> queue = new LinkedList<Command>();
+  protected Date isFeed;
 
-  Player(int x, int y, int idSocket, String teamName, Orientation orientation, Map<String, Ressource> inventory)
+  Player(int x, int y, int idSocket, String teamName, Orientation orientation, Map<String, Ressource> inventory, int frequence)
   {
     super(x, y, teamName, Status.ALIVE, idSocket);
     this.orientation = orientation;
     this.level = 0;
     this.vision = 1;
     this.inventory = inventory;
-    this.id = this.nb++;
+    this.id = this.nb;
+    this.isFeed = new Date(System.currentTimeMillis() + (126 * 10000) / frequence);
     System.out.println("Player number " + this.id + " from socket " + this.idSocket + " has been created");
   }
 
@@ -120,12 +122,39 @@ class Player extends Character
     this.queue = queue;
   }
 
-  public String feed()
+  /**
+  * Returns value of isFeed
+  * @return
+  */
+  public Date getIsFeed()
   {
-    int nb = this.getInventory().get("Food").getNb();
-    this.getInventory().get("Food").setNb(--nb);
-    System.out.println("Player feed");
-    return "true";
+    return this.isFeed;
+  }
+
+  /**
+  * Sets new value of isFeed
+  * @param
+  */
+  public void setIsFeed(Date isFeed)
+  {
+    this.isFeed = isFeed;
+  }
+
+  public String feed(int frequence)
+  {
+    if (System.currentTimeMillis() > this.isFeed.getTime())
+    {
+      int nb = this.getInventory().get("Food").getNb();
+      if (nb > 0)
+      {
+        this.getInventory().get("Food").setNb(--nb);
+        this.isFeed = new Date(System.currentTimeMillis() + (20 * 10000) / frequence);
+        System.out.println("Player feeds");
+        return "";
+      }
+      return "dead";
+    }
+    return "";
   }
 
   public String forward(int sizeX, int sizeY)

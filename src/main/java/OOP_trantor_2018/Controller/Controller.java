@@ -238,7 +238,7 @@ class Controller
             {
                 if (this.teams.get(i).getTeamName().equals(cmd.getPlayer().getTeamName()))
                 {
-                    return (Integer.toString(this.teams.get(i).getNbClients()) + "\n");
+                    return (Integer.toString(this.teams.get(i).getNbClients()));
                 }
                 return "false";
             }
@@ -309,7 +309,7 @@ class Controller
             }
             length++;
         }
-        res = res + "]\n";
+        res = res + "]";
         System.out.println(res);
         return res;
     }

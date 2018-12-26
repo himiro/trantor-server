@@ -4,11 +4,12 @@ class Team
 {
   protected String teamName;
   protected List<Player> players = new ArrayList<Player>();
-  protected int nbClients = 3;
+  protected int nbClients;
 
-  Team(String teamName)
+  Team(String teamName, int nbClients)
   {
     this.teamName = teamName;
+    this.nbClients = nbClients;
   }
 
   /**

@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.regex.*;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,6 +15,8 @@ public class ClientProcessor implements Runnable {
     private boolean closeConnexion = false;
     private Controller control;
     protected int nbSocket;
+    protected boolean isGraphical = false;
+    protected Graphical graphical;
 
     public ClientProcessor(Socket pSock, Parser Pars, Controller pControl, int nbSocket)
     {
@@ -26,6 +29,11 @@ public class ClientProcessor implements Runnable {
     public int getNbSocket()
     {
         return this.nbSocket;
+    }
+
+    public boolean getIsGraphical()
+    {
+        return this.isGraphical;
     }
 
     public void run()
@@ -43,7 +51,15 @@ public class ClientProcessor implements Runnable {
                     response = read();
                     System.out.println(Thread.currentThread().getName() + " : " + response);
                     response = response.toLowerCase();
-                    pars_command(response.substring(0, 1).toUpperCase() + response.substring(1));
+                    if (this.isGraphical == true)
+                    {
+                        this.graphical = new Graphical(this.control, this.writer);
+                        pars_command_graphical(response);
+                    }
+                    else
+                    {
+                        pars_command_player(response.substring(0, 1).toUpperCase() + response.substring(1));
+                    }
                 }
                 else
                 {
@@ -59,17 +75,46 @@ public class ClientProcessor implements Runnable {
                                 {
                                     if (toSend.equals("true"))
                                     {
-                                        this.writer.write("ok\n");
+                                        this.writer.println("ok");
                                     }
                                     else if (toSend.equals("false"))
                                     {
-                                        this.writer.write("ko\n");
+                                        this.writer.println("ko");
                                     }
                                     else
                                     {
-                                        this.writer.write(toSend);
+                                        this.writer.println(toSend);
                                     }
                                     this.writer.flush();
+                                }
+                            }
+                        }
+                        List<Team> teams = this.Parser.getTeams();
+
+                        for (Team team : teams)
+                        {
+                            List<Player> players = team.getPlayers();
+                            for (Player player : players)
+                            {
+                                if (player.feed(time.getFrequence()).equals("dead"))
+                                {
+                                    this.writer.println("dead");
+                                    this.writer.flush();
+                                    this.writer = null;
+                                    this.reader = null;
+                                    players.remove(player);
+                                    team.setPlayers(players);
+                                    int nbClient = team.getNbClients();
+                                    team.setNbClients(++nbClient);
+                                    try
+                                    {
+                                        sock.close();
+                                    }
+                                    catch (IOException e)
+                                    {
+                                        e.printStackTrace();
+                                        return ;
+                                    }
                                 }
                             }
                         }
@@ -120,41 +165,60 @@ public class ClientProcessor implements Runnable {
         int nbClient = 0;
 
         try {
-            toSend = "WELCOME\n";
-            this.writer.write(toSend);
-            this.writer.flush(   );
+            toSend = "WELCOME";
+            this.writer.println(toSend);
+            this.writer.flush();
             response = read();
             response = response.substring(0, response.length() - 1);
-            tmp = Parser.getTeams();
-            for (int i = 0; i < tmp.size(); i++) {
-                temp = tmp.get(i);
-                if (response.equals(temp.getTeamName())) {
-                    if ((nbClient = temp.getNbClients()) != 0) {
-                        Map<String, Ressource> inventory = this.createInventory();
-                        if (this.createPlayer(response, inventory) == true)
-                        {
-                            nbClient-=1;
-                            temp.setNbClients(nbClient);
+            if (response.equals("GRAPHICAL"))
+            {
+                this.isGraphical = true;
+            }
+            else
+            {
+                tmp = Parser.getTeams();
+                for (int i = 0; i < tmp.size(); i++) {
+                    temp = tmp.get(i);
+                    if (response.equals(temp.getTeamName())) {
+                        if ((nbClient = temp.getNbClients()) != 0) {
+                            Map<String, Ressource> inventory = this.createInventory();
+                            if (this.createPlayer(response, inventory) == true)
+                            {
+                                nbClient-=1;
+                                temp.setNbClients(nbClient);
+                            }
                         }
-                    }
-                    else
-                    {
-                        this.writer = null;
-                        this.reader = null;
-                        sock.close();
+                        else
+                        {
+                            this.writer = null;
+                            this.reader = null;
+                            List<Team> teams = Parser.getTeams();
+                            for (Team team : teams) {
+                                if (response.equals(team.getTeamName()))
+                                {
+                                    nbClient = team.getNbClients();
+                                    team.setNbClients(++nbClient);
+                                }
+                            }
+                            sock.close();
+                        }
                     }
                 }
             }
-            toSend = Integer.toString(nbClient) + "\n" + Integer.toString(Parser.getX()) + " " + Integer.toString(Parser.getX()) + "\n";
-            this.writer.write(toSend);
+            toSend = Integer.toString(nbClient) + "\n" + Integer.toString(Parser.getX()) + " " + Integer.toString(Parser.getX());
+            this.writer.println(toSend);
             this.writer.flush();
             remote = (InetSocketAddress)sock.getRemoteSocketAddress();
             debug = Thread.currentThread().getName() + " : Succesfully connected!\n";
-            System.err.println("\n" + debug);
-        }catch(SocketException e){
+            System.err.println(debug);
+        }
+        catch(SocketException e)
+        {
             System.err.println("LA CONNEXION A ETE INTERROMPUE ! ");
             return ;
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             e.printStackTrace();
             return ;
         }
@@ -194,7 +258,7 @@ public class ClientProcessor implements Runnable {
             if (team.getTeamName().equals(teamName) && team.getNbClients() > 0)
             {
                 Random r = new Random();
-                team.getPlayers().add(new Player(r.nextInt(11), r.nextInt(11), this.nbSocket, teamName, Orientation.getRandomOrientation(), inventory));
+                team.getPlayers().add(new Player(r.nextInt(this.Parser.getX()), r.nextInt(this.Parser.getY() + 1), this.nbSocket, teamName, Orientation.getRandomOrientation(), inventory, this.control.getTimeline().getFrequence()));
                 control.setTeams(teams);
                 return true;
             }
@@ -202,11 +266,148 @@ public class ClientProcessor implements Runnable {
         return false;
     }
 
-    private void pars_command(String cmd)
+    private void pars_command_graphical(String cmd)
     {
-        String toSend = "ko\n";
+        String regex;
+        Pattern pattern;
+        Matcher matcher;
+        boolean valid = false;
+        cmd = cmd.replaceAll("\\s{2,}", " ").trim();
+        cmd += '\n';
+        switch (cmd)
+        {
+            case "msz\n":
+            this.writer.println("msz " + control.getWorldMap().getSizeX() + " " + control.getWorldMap().getSizeY());
+            this.writer.flush();
+            valid = true;
+            break;
+            case "mct\n":
+            this.graphical.contentOfTile(0, 0, true);
+            valid = true;
+            break;
+            case "tna\n":
+            this.graphical.nameOfTeams();
+            valid = true;
+            break;
+            case "sgt\n":
+            this.writer.println("sgt " + control.getTimeline().getFrequence());
+            this.writer.flush();
+            valid = true;
+            break;
+            default:
+            break;
+        }
+        if (valid == false)
+        {
+            switch (cmd.substring(0, 4))
+            {
+                case "bct ":
+                regex = "\\bbct\\b\\s(\\d+)\\s(\\d+)\n";
+                pattern = Pattern.compile(regex);
+                matcher = pattern.matcher(cmd);
+                if (matcher.matches())
+                {
+                    int x = Integer.parseInt(matcher.group(1));
+                    int y = Integer.parseInt(matcher.group(2));
+                    if (this.graphical.contentOfTile(x, y, false))
+                    {
+                        this.writer.println("ko");
+                        this.writer.flush();
+                    }
+                    valid = true;
+                }
+                break;
+                case "ppo ":
+                regex = "\\bppo\\b\\s#(\\d+)\n";
+                pattern = Pattern.compile(regex);
+                matcher = pattern.matcher(cmd);
+                if (matcher.matches())
+                {
+                    int id = Integer.parseInt(matcher.group(1));
+                    Player player = this.control.findPlayerBySocketId(id);
+                    if (player != null)
+                    {
+                        this.writer.println("ppo " + id + " " + player.getX() + " " + player.getY() + " " + Orientation.toString(player.getOrientation()));
+                    }
+                    else
+                    {
+                        this.writer.println("ko");
+                    }
+                    this.writer.flush();
+                    valid = true;
+                }
+                break;
+                case "plv ":
+                regex = "\\bplv\\b\\s#(\\d+)\n";
+                pattern = Pattern.compile(regex);
+                matcher = pattern.matcher(cmd);
+                if (matcher.matches())
+                {
+                    int id = Integer.parseInt(matcher.group(1));
+                    Player player = this.control.findPlayerBySocketId(id);
+                    if (player != null)
+                    {
+                        this.writer.println("plv " + id + " " + player.getLevel());
+                    }
+                    else
+                    {
+                        this.writer.println("ko");
+                    }
+                    this.writer.flush();
+                    valid = true;
+                }
+                break;
+                case "pin ":
+                regex = "\\bpin\\b\\s#(\\d+)\n";
+                pattern = Pattern.compile(regex);
+                matcher = pattern.matcher(cmd);
+                if (matcher.matches())
+                {
+                    int id = Integer.parseInt(matcher.group(1));
+                    Player player = this.control.findPlayerBySocketId(id);
+                    if (player != null)
+                    {
+                        Map<String, Ressource> inventory = player.getInventory();
+                        this.writer.println("pin " + id + " " + player.getX() + " " + player.getY() + " " + inventory.get("Food").getNb() + " "
+                        + inventory.get("Linemate").getNb() + " " + inventory.get("Deraumere").getNb() + " " + inventory.get("Sibur").getNb() + " "
+                        + inventory.get("Mendiane").getNb() + " " + inventory.get("Phiras").getNb() + " " + inventory.get("Thystame").getNb());
+                    }
+                    else
+                    {
+                        this.writer.println("ko");
+                    }
+                    this.writer.flush();
+                    valid = true;
+                }
+                break;
+                case "sst ":
+                regex = "\\bsst\\b\\s(\\d+)\n";
+                pattern = Pattern.compile(regex);
+                matcher = pattern.matcher(cmd);
+                if (matcher.matches())
+                {
+                    int timeUnit = Integer.parseInt(matcher.group(1));
+                    control.getTimeline().setFrequence(timeUnit);
+                    this.writer.println("sst " + control.getTimeline().getFrequence());
+                    this.writer.flush();
+                    valid = true;
+                }
+                break;
+                default:
+                break;
+            }
+        }
+        if (valid == false)
+        {
+            this.writer.println("invalid command");
+            this.writer.flush();
+        }
+    }
+
+    private void pars_command_player(String cmd)
+    {
+        String toSend = "ko";
         boolean isValidCommand = false;
-        Command newCmd;
         Timeline time;
 
         switch(cmd)
@@ -232,34 +433,65 @@ public class ClientProcessor implements Runnable {
         if (isValidCommand)
         {
             cmd = cmd.substring(0, cmd.length() - 1);
-            newCmd = this.control.createCommand(cmd, this.nbSocket);
+            this.control.createCommand(cmd, this.nbSocket);
             time = this.control.getTimeline();
             if (time.getCommands() != null)
             {
-                for (int i = 0; i < time.getCommands().size(); i++) {
+                for (int i = 0; i < time.getCommands().size(); i++)
+                {
                     toSend = this.control.isActionFinished(time.getCommands().get(i));
+                    time.getCommands().get(i).getPlayer().feed(time.getFrequence());
                     if (toSend != null && toSend != "nope")
                     {
                         if (toSend.equals("true"))
                         {
-                            this.writer.write("ok\n");
+                            this.writer.println("ok");
                         }
                         else if (toSend.equals("false"))
                         {
-                            this.writer.write("ko\n");
+                            this.writer.println("ko");
                         }
                         else
                         {
-                            this.writer.write(toSend);
+                            this.writer.println(toSend);
                         }
                         this.writer.flush();
+                    }
+                }
+                List<Team> teams = this.Parser.getTeams();
+
+                for (Team team : teams)
+                {
+                    List<Player> players = team.getPlayers();
+                    for (Player player : players)
+                    {
+                        if (player.feed(time.getFrequence()).equals("dead"))
+                        {
+                            this.writer.println("dead");
+                            this.writer.flush();
+                            this.writer = null;
+                            this.reader = null;
+                            players.remove(player);
+                            team.setPlayers(players);
+                            int nbClient = team.getNbClients();
+                            team.setNbClients(++nbClient);
+                            try
+                            {
+                                sock.close();
+                            }
+                            catch (IOException e)
+                            {
+                                e.printStackTrace();
+                                return ;
+                            }
+                        }
                     }
                 }
             }
         }
         else
         {
-            this.writer.write("invalid command\n");
+            this.writer.println("invalid command");
             this.writer.flush();
         }
     }
