@@ -305,6 +305,8 @@ class Player extends Character
 
   public String eject(List<Player> players, int sizeX, int sizeY, Graphical graphical)
   {
+    boolean areOthers = false;
+
     if (players != null)
     {
       for (Player pl : players)
@@ -316,31 +318,43 @@ class Player extends Character
           if (pl.getY() > sizeY)
           pl.setY(0);
           graphical.writeToGraphical("pex " + pl.getId());
+          areOthers = true;
           break;
           case NORTH:
           pl.setY(pl.getY()-1);
           if (pl.getY() < 0)
           pl.setY(sizeY);
           graphical.writeToGraphical("pex " + pl.getId());
+          areOthers = true;
           break;
           case WEST:
           pl.setX(pl.getX()-1);
           if (pl.getX() < 0)
           pl.setX(sizeX);
           graphical.writeToGraphical("pex " + pl.getId());
+          areOthers = true;
           break;
           case EAST:
           pl.setX(pl.getX()+1);
           if (pl.getX() > sizeY)
           pl.setX(0);
           graphical.writeToGraphical("pex " + pl.getId());
+          areOthers = true;
           break;
           default:
+          areOthers = false;
           break;
         }
       }
-      System.out.println("Player eject");
-      return "true";
+      if (areOthers)
+      {
+        System.out.println("Player eject");
+        return "true";
+      }
+      else
+      {
+        return "false";
+      }
     }
     return "false";
   }
