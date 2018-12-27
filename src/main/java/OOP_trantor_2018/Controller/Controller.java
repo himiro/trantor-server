@@ -256,7 +256,8 @@ class Controller
                     String object = cmd.getName().substring(cmd.getName().lastIndexOf(' ') + 1);
                     object = object.toLowerCase();
                     object = object.substring(0,1).toUpperCase() + object.substring(1);
-                    return (cmd.getPlayer().take(takeTile, object, graphical));
+                    Item item = Item.get(object);
+                    return (cmd.getPlayer().take(takeTile, item, graphical));
                 }
                 return "false";
             }
@@ -268,7 +269,8 @@ class Controller
                     String object = cmd.getName().substring(cmd.getName().lastIndexOf(' ') + 1);
                     object = object.toLowerCase();
                     object = object.substring(0,1).toUpperCase() + object.substring(1);
-                    return (cmd.getPlayer().set(setTile, object, graphical));
+                    Item item = Item.get(object);
+                    return (cmd.getPlayer().set(setTile, item, graphical));
                 }
                 return "false";
             }
@@ -316,7 +318,6 @@ class Controller
             length++;
         }
         res = res + "]";
-        System.out.println(res);
         return res;
     }
 

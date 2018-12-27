@@ -267,7 +267,7 @@ public class ClientProcessor implements Runnable {
                 Player player = new Player(r.nextInt(this.Parser.getX()), r.nextInt(this.Parser.getY() + 1), this.nbSocket, teamName, Orientation.getRandomOrientation(), inventory, this.control.getTimeline().getFrequence());
                 team.getPlayers().add(player);
                 control.setTeams(teams);
-                this.graphical.writeToGraphical("pnw #" + player.getId() + " " + player.getX() + " " + player.getY() + " " + Orientation.toString(player.getOrientation()) + " " + player.getLevel() + " " + team.getTeamName());
+                this.graphical.writeToGraphical("pnw #" + player.getId() + " " + player.getX() + " " + player.getY() + " " + player.getOrientation().getName() + " " + player.getLevel() + " " + team.getTeamName());
 
                 return true;
             }
@@ -336,7 +336,7 @@ public class ClientProcessor implements Runnable {
                     Player player = this.control.findPlayerBySocketId(id);
                     if (player != null)
                     {
-                        this.writer.println("ppo " + id + " " + player.getX() + " " + player.getY() + " " + Orientation.toString(player.getOrientation()));
+                        this.writer.println("ppo " + id + " " + player.getX() + " " + player.getY() + " " + player.getOrientation().getName());
                     }
                     else
                     {

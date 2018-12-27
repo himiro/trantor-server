@@ -258,34 +258,34 @@ class Player extends Character
     return "true";
   }
 
-  public String take(Tile tile, String object, Graphical graphical)
+  public String take(Tile tile, Item object, Graphical graphical)
   {
-    int nbPlayer = this.getInventory().get(object).getNb();
-    int nbTile = tile.getRessources().get(object).getNb();
+    int nbPlayer = this.getInventory().get(object.getName()).getNb();
+    int nbTile = tile.getRessources().get(object.getName()).getNb();
     if (nbTile > 0)
     {
-      tile.getRessources().get(object).setNb(--nbTile);
-      this.getInventory().get(object).setNb(++nbPlayer);
-      System.out.println("Player took " + tile.getRessources().get(object).getName() + ".There is " + tile.getRessources().get(object).getNb() + " last on the tile");
-      System.out.println("Player took " + tile.getRessources().get(object).getName() + ".He has " + this.getInventory().get(object).getNb() + " in his inventory");
-      graphical.writeToGraphical("pgt " + this.id + "1");
+      tile.getRessources().get(object.getName()).setNb(--nbTile);
+      this.getInventory().get(object.getName()).setNb(++nbPlayer);
+      System.out.println("Player took " + tile.getRessources().get(object.getName()).getName() + ".There is " + tile.getRessources().get(object.getName()).getNb() + " last on the tile");
+      System.out.println("Player took " + tile.getRessources().get(object.getName()).getName() + ".He has " + this.getInventory().get(object.getName()).getNb() + " in his inventory");
+      graphical.writeToGraphical("pgt " + this.id + " " + object.getNumberItem(object));
       return "true";
     }
     return "false";
   }
 
-  public String set(Tile tile, String object, Graphical graphical)
+  public String set(Tile tile, Item object, Graphical graphical)
   {
-    System.out.println("SET OBJECT : " + object);
-    int nbPlayer = this.getInventory().get(object).getNb();
-    int nbTile = tile.getRessources().get(object).getNb();
+    System.out.println("SET OBJECT : " + object.getName());
+    int nbPlayer = this.getInventory().get(object.getName()).getNb();
+    int nbTile = tile.getRessources().get(object.getName()).getNb();
     if (nbPlayer > 0)
     {
-      tile.getRessources().get(object).setNb(++nbTile);
-      this.getInventory().get(object).setNb(--nbPlayer);
-      System.out.println("Player drop " + tile.getRessources().get(object).getName() + ".There is " + tile.getRessources().get(object).getNb() + " last on the tile");
-      System.out.println("Player drop " + tile.getRessources().get(object).getName() + ".He has " + this.getInventory().get(object).getNb() + " in his inventory");
-      graphical.writeToGraphical("pdr " + this.id + "1");
+      tile.getRessources().get(object.getName()).setNb(++nbTile);
+      this.getInventory().get(object.getName()).setNb(--nbPlayer);
+      System.out.println("Player drop " + tile.getRessources().get(object.getName()).getName() + ".There is " + tile.getRessources().get(object.getName()).getNb() + " last on the tile");
+      System.out.println("Player drop " + tile.getRessources().get(object.getName()).getName() + ".He has " + this.getInventory().get(object.getName()).getNb() + " in his inventory");
+      graphical.writeToGraphical("pdr " + this.id + " " + object.getNumberItem(object));
       return "true";
     }
     return "false";
