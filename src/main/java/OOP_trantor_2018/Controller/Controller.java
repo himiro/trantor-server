@@ -132,7 +132,7 @@ class Controller
         command = timeline.addCommand(command);
     }
 
-    public String removeCommand(Command command)
+    public String removeCommand(Command command, Graphical graphical)
     {
         //if action finished
         //remove the command from the timeline and check if another command is waiting in the player's queue
@@ -140,7 +140,7 @@ class Controller
         //execute
         this.timeline.getCommands().remove(command);
         System.out.println("Execute command : " + command.getName());
-        String ret = this.execute(command);
+        String ret = this.execute(command, graphical);
         if (command.getPlayer().getQueue().size() != 0)
         {
             this.pushCommandToTimeline(command.getPlayer().getQueue().peek());
@@ -184,7 +184,7 @@ class Controller
         return null;
     }
 
-    public String isActionFinished(Command command)
+    public String isActionFinished(Command command, Graphical graphical)
     {
         //go through timeline if currentdate > endDate call remove command
         Date currentDate = new Date(System.currentTimeMillis());
@@ -196,7 +196,7 @@ class Controller
                 if (tmp.getEnd().getTime() < currentDate.getTime())
                 {
                     //move remove command to get the removeCommand return value and call removeCommand after called isActionFinished
-                    String ret = this.removeCommand(tmp);
+                    String ret = this.removeCommand(tmp, graphical);
                     return (ret);
                 }
                 return "nope";
@@ -206,7 +206,7 @@ class Controller
     }
 
 
-    public String execute(Command cmd)
+    public String execute(Command cmd, Graphical graphical)
     {
         switch(cmd.getName())
         {
@@ -227,7 +227,7 @@ class Controller
             Tile ejectTile = this.worldMap.getTileByCoordinates(cmd.getPlayer().getX(), cmd.getPlayer().getY());
             if (ejectTile != null)
             {
-                return (cmd.getPlayer().eject(ejectTile.getPlayers(), this.worldMap.getSizeX(), this.worldMap.getSizeY()));
+                return (cmd.getPlayer().eject(ejectTile.getPlayers(), this.worldMap.getSizeX(), this.worldMap.getSizeY(), graphical));
             }
             return "false";
             case "Incantation":
@@ -253,7 +253,10 @@ class Controller
                 Tile takeTile = this.worldMap.getTileByCoordinates(cmd.getPlayer().getX(), cmd.getPlayer().getY());
                 if (takeTile != null)
                 {
-                    return (cmd.getPlayer().take(takeTile, cmd.getName().substring(cmd.getName().lastIndexOf(' ') + 1)));
+                    String object = cmd.getName().substring(cmd.getName().lastIndexOf(' ') + 1);
+                    object = object.toLowerCase();
+                    object = object.substring(0,1).toUpperCase() + object.substring(1);
+                    return (cmd.getPlayer().take(takeTile, object, graphical));
                 }
                 return "false";
             }
@@ -262,7 +265,10 @@ class Controller
                 Tile setTile = this.worldMap.getTileByCoordinates(cmd.getPlayer().getX(), cmd.getPlayer().getY());
                 if (setTile != null)
                 {
-                    return (cmd.getPlayer().set(setTile, cmd.getName().substring(cmd.getName().lastIndexOf(' ') + 1)));
+                    String object = cmd.getName().substring(cmd.getName().lastIndexOf(' ') + 1);
+                    object = object.toLowerCase();
+                    object = object.substring(0,1).toUpperCase() + object.substring(1);
+                    return (cmd.getPlayer().set(setTile, object, graphical));
                 }
                 return "false";
             }

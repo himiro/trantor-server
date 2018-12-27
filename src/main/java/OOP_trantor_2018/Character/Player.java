@@ -140,7 +140,7 @@ class Player extends Character
     this.isFeed = isFeed;
   }
 
-  public String feed(int frequence)
+  public String feed(int frequence, Graphical graphical)
   {
     if (System.currentTimeMillis() > this.isFeed.getTime())
     {
@@ -152,6 +152,7 @@ class Player extends Character
         System.out.println("Player eats");
         return "";
       }
+      graphical.writeToGraphical("pdi " + this.id);
       return "dead";
     }
     return "";
@@ -257,7 +258,7 @@ class Player extends Character
     return "true";
   }
 
-  public String take(Tile tile, String object)
+  public String take(Tile tile, String object, Graphical graphical)
   {
     int nbPlayer = this.getInventory().get(object).getNb();
     int nbTile = tile.getRessources().get(object).getNb();
@@ -267,13 +268,15 @@ class Player extends Character
       this.getInventory().get(object).setNb(++nbPlayer);
       System.out.println("Player took " + tile.getRessources().get(object).getName() + ".There is " + tile.getRessources().get(object).getNb() + " last on the tile");
       System.out.println("Player took " + tile.getRessources().get(object).getName() + ".He has " + this.getInventory().get(object).getNb() + " in his inventory");
+      graphical.writeToGraphical("pgt " + this.id + "1");
       return "true";
     }
     return "false";
   }
 
-  public String set(Tile tile, String object)
+  public String set(Tile tile, String object, Graphical graphical)
   {
+    System.out.println("SET OBJECT : " + object);
     int nbPlayer = this.getInventory().get(object).getNb();
     int nbTile = tile.getRessources().get(object).getNb();
     if (nbPlayer > 0)
@@ -282,6 +285,7 @@ class Player extends Character
       this.getInventory().get(object).setNb(--nbPlayer);
       System.out.println("Player drop " + tile.getRessources().get(object).getName() + ".There is " + tile.getRessources().get(object).getNb() + " last on the tile");
       System.out.println("Player drop " + tile.getRessources().get(object).getName() + ".He has " + this.getInventory().get(object).getNb() + " in his inventory");
+      graphical.writeToGraphical("pdr " + this.id + "1");
       return "true";
     }
     return "false";
@@ -299,7 +303,7 @@ class Player extends Character
     return "true";
   }
 
-  public String eject(List<Player> players, int sizeX, int sizeY)
+  public String eject(List<Player> players, int sizeX, int sizeY, Graphical graphical)
   {
     if (players != null)
     {
@@ -311,21 +315,25 @@ class Player extends Character
           pl.setY(pl.getY()+1);
           if (pl.getY() > sizeY)
           pl.setY(0);
+          graphical.writeToGraphical("pex " + pl.getId());
           break;
           case NORTH:
           pl.setY(pl.getY()-1);
           if (pl.getY() < 0)
           pl.setY(sizeY);
+          graphical.writeToGraphical("pex " + pl.getId());
           break;
           case WEST:
           pl.setX(pl.getX()-1);
           if (pl.getX() < 0)
           pl.setX(sizeX);
+          graphical.writeToGraphical("pex " + pl.getId());
           break;
           case EAST:
           pl.setX(pl.getX()+1);
           if (pl.getX() > sizeY)
           pl.setX(0);
+          graphical.writeToGraphical("pex " + pl.getId());
           break;
           default:
           break;

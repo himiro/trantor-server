@@ -87,10 +87,8 @@ class Graphical
 
     public void writeToGraphical(String message)
     {
-        System.out.println("ICI : " + this.graphicals.size());
         for (PrintWriter graphical : this.graphicals)
         {
-            System.out.println(message);
             graphical.println(message);
             graphical.flush();
         }

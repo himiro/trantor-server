@@ -74,7 +74,7 @@ public class ClientProcessor implements Runnable {
                         {
                             //Faire fonction pour éviter duplication de code
                             for (int i = 0; i < commands.size(); i++) {
-                                toSend = this.control.isActionFinished(commands.get(i));
+                                toSend = this.control.isActionFinished(commands.get(i), this.graphical);
                                 if (toSend != null && toSend != "nope")
                                 {
                                     if (toSend.equals("true"))
@@ -101,7 +101,7 @@ public class ClientProcessor implements Runnable {
                             List<Player> players = team.getPlayers();
                             for (Player player : players)
                             {
-                                if (player.feed(time.getFrequence()).equals("dead"))
+                                if (player.feed(time.getFrequence(), this.graphical).equals("dead"))
                                 {
                                     this.writer.println("dead");
                                     this.writer.flush();
@@ -408,6 +408,7 @@ public class ClientProcessor implements Runnable {
         }
         if (valid == false)
         {
+            graphical.writeToGraphical("suc");
             this.writer.println("invalid command");
             this.writer.flush();
         }
@@ -450,8 +451,8 @@ public class ClientProcessor implements Runnable {
                 //Faire fonction pour éviter duplication de code
                 for (int i = 0; i < time.getCommands().size(); i++)
                 {
-                    toSend = this.control.isActionFinished(time.getCommands().get(i));
-                    time.getCommands().get(i).getPlayer().feed(time.getFrequence());
+                    toSend = this.control.isActionFinished(time.getCommands().get(i), this.graphical);
+                    time.getCommands().get(i).getPlayer().feed(time.getFrequence(), this.graphical);
                     if (toSend != null && toSend != "nope")
                     {
                         if (toSend.equals("true"))
@@ -477,7 +478,7 @@ public class ClientProcessor implements Runnable {
                     List<Player> players = team.getPlayers();
                     for (Player player : players)
                     {
-                        if (player.feed(time.getFrequence()).equals("dead"))
+                        if (player.feed(time.getFrequence(), this.graphical).equals("dead"))
                         {
                             this.writer.println("dead");
                             this.writer.flush();
@@ -503,7 +504,7 @@ public class ClientProcessor implements Runnable {
         }
         else
         {
-            this.writer.println("invalid command");
+            this.writer.println("invalid commandazer");
             this.writer.flush();
         }
     }
