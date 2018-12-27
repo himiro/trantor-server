@@ -148,8 +148,8 @@ class Player extends Character
       if (nb > 0)
       {
         this.getInventory().get("Food").setNb(--nb);
-        this.isFeed = new Date(System.currentTimeMillis() + (20 * 10000) / frequence);
-        System.out.println("Player feeds");
+        this.isFeed = new Date(System.currentTimeMillis() + (126 * 10000) / frequence);
+        System.out.println("Player eats");
         return "";
       }
       return "dead";
