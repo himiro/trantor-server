@@ -152,18 +152,6 @@ class Controller
         return ret;
     }
 
-    public void newTeam(String teamName)
-    {
-        //create new team
-        System.out.println("New team");
-    }
-
-    public void removeTeam()
-    {
-        //Fonction à appeler seulement après l'enregistrement des données SQL
-        System.out.println("Team removed");
-    }
-
     public void saveResult()
     {
         System.out.println("Save result in SQL");
@@ -319,6 +307,29 @@ class Controller
         }
         res = res + "]";
         return res;
+    }
+
+    public boolean endOfGame(Graphical graphical)
+    {
+        for (Team team : this.teams)
+        {
+            int count = 0;
+            List<Player> players = team.getPlayers();
+            for (Player player : players)
+            {
+                if (player.getLevel() == 8)
+                {
+                    count++;
+                }
+                if (count >= 6)
+                {
+                    graphical.writeToGraphical("seg " + team.getTeamName());
+                    this.saveResult();
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }

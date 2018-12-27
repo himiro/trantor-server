@@ -60,73 +60,70 @@ public class ClientProcessor implements Runnable {
                     else
                     {
                         if (response != null)
+                        {
                             pars_command_player(response.substring(0, 1).toUpperCase() + response.substring(1));
+                        }
                     }
                 }
-                else
+                if (this.control.endOfGame(this.graphical) == true)
                 {
-                    try
-                    {
-                        Timeline time = this.control.getTimeline();
-                        List<Command> commands = time.getCommands();
+                    this.writer = null;
+                    this.reader = null;
+                    sock.close();
+                    return ;
+                }
+                Timeline time = this.control.getTimeline();
+                List<Command> commands = time.getCommands();
 
-                        if (commands != null && commands.size() > 0)
+                if (commands != null && commands.size() > 0)
+                {
+                    for (int i = 0; i < commands.size(); i++) {
+                        toSend = this.control.isActionFinished(commands.get(i), this.graphical);
+                        if (toSend != null && toSend != "nope")
                         {
-                            //Faire fonction pour éviter duplication de code
-                            for (int i = 0; i < commands.size(); i++) {
-                                toSend = this.control.isActionFinished(commands.get(i), this.graphical);
-                                if (toSend != null && toSend != "nope")
-                                {
-                                    if (toSend.equals("true"))
-                                    {
-                                        this.writer.println("ok");
-                                    }
-                                    else if (toSend.equals("false"))
-                                    {
-                                        this.writer.println("ko");
-                                    }
-                                    else
-                                    {
-                                        this.writer.println(toSend);
-                                    }
-                                    this.writer.flush();
-                                }
-                            }
-                        }
-                        //Faire fonction pour éviter duplication de code
-                        List<Team> teams = this.Parser.getTeams();
-
-                        for (Team team : teams)
-                        {
-                            List<Player> players = team.getPlayers();
-                            for (Player player : players)
+                            if (toSend.equals("true"))
                             {
-                                if (player.feed(time.getFrequence(), this.graphical).equals("dead"))
-                                {
-                                    this.writer.println("dead");
-                                    this.writer.flush();
-                                    this.writer = null;
-                                    this.reader = null;
-                                    players.remove(player);
-                                    team.setPlayers(players);
-                                    int nbClient = team.getNbClients();
-                                    team.setNbClients(++nbClient);
-                                    try
-                                    {
-                                        sock.close();
-                                    }
-                                    catch (IOException e)
-                                    {
-                                        e.printStackTrace();
-                                        return ;
-                                    }
-                                }
+                                this.writer.println("ok");
                             }
+                            else if (toSend.equals("false"))
+                            {
+                                this.writer.println("ko");
+                            }
+                            else
+                            {
+                                this.writer.println(toSend);
+                            }
+                            this.writer.flush();
                         }
                     }
-                    catch (Exception e)
+                }
+                List<Team> teams = this.Parser.getTeams();
+
+                for (Team team : teams)
+                {
+                    List<Player> players = team.getPlayers();
+                    for (Player player : players)
                     {
-                        ;
+                        if (player.feed(time.getFrequence(), this.graphical).equals("dead"))
+                        {
+                            this.writer.println("dead");
+                            this.writer.flush();
+                            this.writer = null;
+                            this.reader = null;
+                            players.remove(player);
+                            team.setPlayers(players);
+                            int nbClient = team.getNbClients();
+                            team.setNbClients(++nbClient);
+                            try
+                            {
+                                sock.close();
+                            }
+                            catch (IOException e)
+                            {
+                                e.printStackTrace();
+                                return ;
+                            }
+                        }
                     }
                 }
 
@@ -268,7 +265,6 @@ public class ClientProcessor implements Runnable {
                 team.getPlayers().add(player);
                 control.setTeams(teams);
                 this.graphical.writeToGraphical("pnw #" + player.getId() + " " + player.getX() + " " + player.getY() + " " + player.getOrientation().getName() + " " + player.getLevel() + " " + team.getTeamName());
-
                 return true;
             }
         }
