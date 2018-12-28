@@ -1,4 +1,5 @@
 import java.util.*;
+import java.io.PrintWriter;
 
 class Player extends Character
 {
@@ -10,17 +11,18 @@ class Player extends Character
   protected int id;
   protected Queue<Command> queue = new LinkedList<Command>();
   protected Date isFeed;
+  protected PrintWriter writer;
 
-  Player(int x, int y, int idSocket, String teamName, Orientation orientation, Map<String, Ressource> inventory, int frequence)
+  Player(int x, int y, int idSocket, String teamName, Orientation orientation, Map<String, Ressource> inventory, int frequence, PrintWriter writer)
   {
     super(x, y, teamName, Status.ALIVE, idSocket);
     this.orientation = orientation;
     this.level = 0;
     this.vision = 1;
     this.inventory = inventory;
-    this.id = this.nb;
+    this.id = this.nb++;
     this.isFeed = new Date(System.currentTimeMillis() + (126 * 10000) / frequence);
-    System.out.println("Player number " + this.id + " from socket " + this.idSocket + " has been created");
+    this.writer = writer;
   }
 
   /**
@@ -138,6 +140,24 @@ class Player extends Character
   public void setIsFeed(Date isFeed)
   {
     this.isFeed = isFeed;
+  }
+
+  /**
+  * Returns value of writer
+  * @return
+  */
+  public PrintWriter getWriter()
+  {
+    return this.writer;
+  }
+
+  /**
+  * Sets new value of isFeed
+  * @param
+  */
+  public void setWriter(PrintWriter writer)
+  {
+    this.writer = writer;
   }
 
   public String feed(int frequence, Graphical graphical)
@@ -266,8 +286,6 @@ class Player extends Character
     {
       tile.getRessources().get(object.getName()).setNb(--nbTile);
       this.getInventory().get(object.getName()).setNb(++nbPlayer);
-      System.out.println("Player took " + tile.getRessources().get(object.getName()).getName() + ".There is " + tile.getRessources().get(object.getName()).getNb() + " last on the tile");
-      System.out.println("Player took " + tile.getRessources().get(object.getName()).getName() + ".He has " + this.getInventory().get(object.getName()).getNb() + " in his inventory");
       graphical.writeToGraphical("pgt " + this.id + " " + object.getNumberItem(object));
       return "true";
     }
@@ -276,15 +294,12 @@ class Player extends Character
 
   public String set(Tile tile, Item object, Graphical graphical)
   {
-    System.out.println("SET OBJECT : " + object.getName());
     int nbPlayer = this.getInventory().get(object.getName()).getNb();
     int nbTile = tile.getRessources().get(object.getName()).getNb();
     if (nbPlayer > 0)
     {
       tile.getRessources().get(object.getName()).setNb(++nbTile);
       this.getInventory().get(object.getName()).setNb(--nbPlayer);
-      System.out.println("Player drop " + tile.getRessources().get(object.getName()).getName() + ".There is " + tile.getRessources().get(object.getName()).getNb() + " last on the tile");
-      System.out.println("Player drop " + tile.getRessources().get(object.getName()).getName() + ".He has " + this.getInventory().get(object.getName()).getNb() + " in his inventory");
       graphical.writeToGraphical("pdr " + this.id + " " + object.getNumberItem(object));
       return "true";
     }
@@ -348,7 +363,6 @@ class Player extends Character
       }
       if (areOthers)
       {
-        System.out.println("Player eject");
         return "true";
       }
       else

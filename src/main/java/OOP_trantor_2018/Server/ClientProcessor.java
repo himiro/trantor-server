@@ -65,68 +65,6 @@ public class ClientProcessor implements Runnable {
                         }
                     }
                 }
-                if (this.control.endOfGame(this.graphical) == true)
-                {
-                    this.writer = null;
-                    this.reader = null;
-                    sock.close();
-                    return ;
-                }
-                Timeline time = this.control.getTimeline();
-                List<Command> commands = time.getCommands();
-
-                if (commands != null && commands.size() > 0)
-                {
-                    for (int i = 0; i < commands.size(); i++) {
-                        toSend = this.control.isActionFinished(commands.get(i), this.graphical);
-                        if (toSend != null && toSend != "nope")
-                        {
-                            if (toSend.equals("true"))
-                            {
-                                this.writer.println("ok");
-                            }
-                            else if (toSend.equals("false"))
-                            {
-                                this.writer.println("ko");
-                            }
-                            else
-                            {
-                                this.writer.println(toSend);
-                            }
-                            this.writer.flush();
-                        }
-                    }
-                }
-                List<Team> teams = this.Parser.getTeams();
-
-                for (Team team : teams)
-                {
-                    List<Player> players = team.getPlayers();
-                    for (Player player : players)
-                    {
-                        if (player.feed(time.getFrequence(), this.graphical).equals("dead"))
-                        {
-                            this.writer.println("dead");
-                            this.writer.flush();
-                            this.writer = null;
-                            this.reader = null;
-                            players.remove(player);
-                            team.setPlayers(players);
-                            int nbClient = team.getNbClients();
-                            team.setNbClients(++nbClient);
-                            try
-                            {
-                                sock.close();
-                            }
-                            catch (IOException e)
-                            {
-                                e.printStackTrace();
-                                return ;
-                            }
-                        }
-                    }
-                }
-
                 if(closeConnexion){
                     System.err.println("COMMANDE CLOSE DETECTEE ! ");
                     this.writer = null;
@@ -134,10 +72,14 @@ public class ClientProcessor implements Runnable {
                     sock.close();
                 }
             }
-        }catch(SocketException e){
+        }
+        catch(SocketException e)
+        {
             System.err.println("LA CONNEXION A ETE INTERROMPUE ! ");
             return ;
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             e.printStackTrace();
             return ;
         }
@@ -261,7 +203,7 @@ public class ClientProcessor implements Runnable {
             if (team.getTeamName().equals(teamName) && team.getNbClients() > 0)
             {
                 Random r = new Random();
-                Player player = new Player(r.nextInt(this.Parser.getX()), r.nextInt(this.Parser.getY() + 1), this.nbSocket, teamName, Orientation.getRandomOrientation(), inventory, this.control.getTimeline().getFrequence());
+                Player player = new Player(r.nextInt(this.Parser.getX()), r.nextInt(this.Parser.getY() + 1), this.nbSocket, teamName, Orientation.getRandomOrientation(), inventory, this.control.getTimeline().getFrequence(), this.writer);
                 team.getPlayers().add(player);
                 control.setTeams(teams);
                 this.graphical.writeToGraphical("pnw #" + player.getId() + " " + player.getX() + " " + player.getY() + " " + player.getOrientation().getName() + " " + player.getLevel() + " " + team.getTeamName());
@@ -440,69 +382,12 @@ public class ClientProcessor implements Runnable {
         {
             cmd = cmd.substring(0, cmd.length() - 1);
             if (control != null || cmd != null)
-                this.control.createCommand(cmd, this.nbSocket);
-            time = this.control.getTimeline();
-            if (time.getCommands() != null)
-            {
-                //Faire fonction pour éviter duplication de code
-                for (int i = 0; i < time.getCommands().size(); i++)
-                {
-                    toSend = this.control.isActionFinished(time.getCommands().get(i), this.graphical);
-                    time.getCommands().get(i).getPlayer().feed(time.getFrequence(), this.graphical);
-                    if (toSend != null && toSend != "nope")
-                    {
-                        if (toSend.equals("true"))
-                        {
-                            this.writer.println("ok");
-                        }
-                        else if (toSend.equals("false"))
-                        {
-                            this.writer.println("ko");
-                        }
-                        else
-                        {
-                            this.writer.println(toSend);
-                        }
-                        this.writer.flush();
-                    }
-                }
-                //Faire fonction pour éviter duplication de code
-                List<Team> teams = this.Parser.getTeams();
-
-                for (Team team : teams)
-                {
-                    List<Player> players = team.getPlayers();
-                    for (Player player : players)
-                    {
-                        if (player.feed(time.getFrequence(), this.graphical).equals("dead"))
-                        {
-                            this.writer.println("dead");
-                            this.writer.flush();
-                            this.writer = null;
-                            this.reader = null;
-                            players.remove(player);
-                            team.setPlayers(players);
-                            int nbClient = team.getNbClients();
-                            team.setNbClients(++nbClient);
-                            try
-                            {
-                                sock.close();
-                            }
-                            catch (IOException e)
-                            {
-                                e.printStackTrace();
-                                return ;
-                            }
-                        }
-                    }
-                }
-            }
+            this.control.createCommand(cmd, this.nbSocket);
         }
         else
         {
-            this.writer.println("invalid commandazer");
+            this.writer.println("invalid command");
             this.writer.flush();
         }
     }
-
 }

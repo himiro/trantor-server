@@ -11,7 +11,7 @@ public class Server {
     private ServerSocket server = null;
     private boolean isRunning = true;
     private Parser Parser;
-    private Controller Control;
+    private Controller control;
     protected int nbSocket = 0;
     protected Graphical graphical;
 
@@ -26,18 +26,28 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Control = new Controller(Parser);
-        this.graphical = new Graphical(this.Control, null);
+        control = new Controller(Parser);
+        this.graphical = new Graphical(this.control, null);
     }
 
     public void open()
     {
+        Thread gameloop = new Thread(new Runnable(){
+            public void run(){
+                System.out.println("GAMELOOP");
+                Thread thr = new Thread(new GameLoop(control, graphical));
+                thr.start();
+            }
+        });
+        gameloop.start();
+
         Thread thr = new Thread(new Runnable(){
             public void run(){
                 while(isRunning == true){
                     try {
+                        System.out.println("CLIENT");
                         Socket client = server.accept();
-                        Thread thr = new Thread(new ClientProcessor(client, Parser, Control, ++nbSocket, graphical));
+                        Thread thr = new Thread(new ClientProcessor(client, Parser, control, ++nbSocket, graphical));
                         thr.start();
                     } catch (IOException e) {
                         e.printStackTrace();
