@@ -12,6 +12,26 @@ public class GameLoop implements Runnable
         this.graphical = graphical;
     }
 
+    public void setController(Controller controller)
+    {
+        this.controller = controller;
+    }
+
+    public Controller getController()
+    {
+        return this.controller;
+    }
+
+    public void setGraphical(Graphical graphical)
+    {
+        this.graphical = graphical;
+    }
+
+    public Graphical getGraphical()
+    {
+        return this.graphical;
+    }
+
     public void run()
     {
         while (true)
@@ -32,7 +52,6 @@ public class GameLoop implements Runnable
                     toSend = this.controller.isActionFinished(commands.get(i), this.graphical);
                     if (toSend != null && toSend != "nope")
                     {
-                        System.out.println("ISACTIONFINISHED : " + time.getCommands() + " / " + toSend);
                         if (toSend.equals("true"))
                         {
                             tmp.println("ok");

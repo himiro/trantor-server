@@ -69,13 +69,30 @@ class Controller
         this.teams = teams;
     }
 
+    /**
+    * Returns value of parser
+    * @return
+    */
+    public Parser getParse()
+    {
+        return this.parser;
+    }
+
+    /**
+    * Sets new value of parser
+    * @param
+    */
+    public void setParser(Parser parser)
+    {
+        this.parser = parser;
+    }
+
     public void initWorldMap(int x, int y)
     {
         List<Tile> LTile = new ArrayList<Tile>();
         this.worldMap = new WorldMap(x, y);
         int nb;
 
-        System.out.println("World Map initialisation");
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {
                 int firnb = (int) (Math.random() * 4);
@@ -276,7 +293,6 @@ class Controller
         String res;
 
         tile = this.worldMap.getTileByCoordinates(player.getX(), player.getY());
-        System.out.println("Player looked around");
         res = "[";
         res = res + player.look(tile);
         while (y != (player.getY() + player.getVision()) % (this.worldMap.getSizeY()))

@@ -18,6 +18,11 @@ class Graphical
         return (this.controller);
     }
 
+    public void getController(Controller controller)
+    {
+        this.controller = controller;
+    }
+
     public PrintWriter getWriter()
     {
         return (this.writer);

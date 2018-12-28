@@ -27,15 +27,167 @@ public class ClientProcessor implements Runnable {
         this.graphical = graphical;
     }
 
-    public int getNbSocket()
-    {
-        return this.nbSocket;
-    }
+    /**
+	* Returns value of sock
+	* @return
+	*/
+	public Socket getSock()
+	{
+		return this.sock;
+	}
 
-    public boolean getIsGraphical()
-    {
-        return this.isGraphical;
-    }
+	/**
+	* Sets new value of sock
+	* @param
+	*/
+	public void setSock(Socket sock)
+	{
+		this.sock = sock;
+	}
+
+	/**
+	* Returns value of writer
+	* @return
+	*/
+	public PrintWriter getWriter()
+	{
+		return this.writer;
+	}
+
+	/**
+	* Sets new value of writer
+	* @param
+	*/
+	public void setWriter(PrintWriter writer)
+	{
+		this.writer = writer;
+	}
+
+	/**
+	* Returns value of reader
+	* @return
+	*/
+	public BufferedInputStream getReader()
+	{
+		return this.reader;
+	}
+
+	/**
+	* Sets new value of reader
+	* @param
+	*/
+	public void setReader(BufferedInputStream reader)
+	{
+		this.reader = reader;
+	}
+
+	/**
+	* Returns value of Parser
+	* @return
+	*/
+	public Parser getParser()
+	{
+		return this.Parser;
+	}
+
+	/**
+	* Sets new value of Parser
+	* @param
+	*/
+	public void setParser(Parser Parser)
+	{
+		this.Parser = Parser;
+	}
+
+	/**
+	* Returns value of closeConnexion
+	* @return
+	*/
+	public boolean getCloseConnexion()
+	{
+		return this.closeConnexion;
+	}
+
+	/**
+	* Sets new value of closeConnexion
+	* @param
+	*/
+	public void setCloseConnexion(boolean closeConnexion)
+	{
+		this.closeConnexion = closeConnexion;
+	}
+
+	/**
+	* Returns value of control
+	* @return
+	*/
+	public Controller getControl()
+	{
+		return this.control;
+	}
+
+	/**
+	* Sets new value of control
+	* @param
+	*/
+	public void setControl(Controller control)
+	{
+		this.control = control;
+	}
+
+	/**
+	* Returns value of nbSocket
+	* @return
+	*/
+	public int getNbSocket()
+	{
+		return this.nbSocket;
+	}
+
+	/**
+	* Sets new value of nbSocket
+	* @param
+	*/
+	public void setNbSocket(int nbSocket)
+	{
+		this.nbSocket = nbSocket;
+	}
+
+	/**
+	* Returns value of isGraphical
+	* @return
+	*/
+	public boolean getIsGraphical()
+	{
+		return this.isGraphical;
+	}
+
+	/**
+	* Sets new value of isGraphical
+	* @param
+	*/
+	public void setIsGraphical(boolean isGraphical)
+	{
+		this.isGraphical = isGraphical;
+	}
+
+	/**
+	* Returns value of graphical
+	* @return
+	*/
+	public Graphical getGraphical()
+	{
+		return this.graphical;
+	}
+
+	/**
+	* Sets new value of graphical
+	* @param
+	*/
+	public void setGraphical(Graphical graphical)
+	{
+		this.graphical = graphical;
+	}
 
     public void run()
     {
@@ -194,8 +346,6 @@ public class ClientProcessor implements Runnable {
 
     public boolean createPlayer(String teamName, Map<String, Ressource> inventory)
     {
-        System.out.println(this.Parser.getTeams().get(0).getTeamName());
-
         List<Team> teams = this.Parser.getTeams();
 
         for (Team team : teams)

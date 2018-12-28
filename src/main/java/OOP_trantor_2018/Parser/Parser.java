@@ -5,7 +5,7 @@ class Parser {
     private int x = 10;
     private int y = 10;
     private List<Team> teams = new ArrayList<Team>();
-    private int nbClient = 3;
+    private int nbClient = 6;
     private int freq = 100;
 
     Parser(String[] args)

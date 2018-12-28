@@ -111,9 +111,4 @@ abstract class Character
   {
     this.status = status;
   }
-
-  public void dead()
-  {
-    System.out.println("Dead Character");
-  }
 }

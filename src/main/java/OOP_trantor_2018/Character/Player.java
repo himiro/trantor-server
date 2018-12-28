@@ -219,19 +219,19 @@ class Player extends Character
     {
       case NORTH:
       this.orientation = orientation.WEST;
-      System.out.println("Player turn WEST");
+      System.out.println("Player turns WEST");
       break;
       case EAST:
       this.orientation = orientation.NORTH;
-      System.out.println("Player turn North");
+      System.out.println("Player turns North");
       break;
       case WEST:
       this.orientation = orientation.SOUTH;
-      System.out.println("Player turn South");
+      System.out.println("Player turns South");
       break;
       case SOUTH:
       this.orientation = orientation.EAST;
-      System.out.println("Player turn East");
+      System.out.println("Player turns East");
       break;
     }
     return "true";
@@ -243,19 +243,19 @@ class Player extends Character
     {
       case NORTH:
       this.orientation = orientation.EAST;
-      System.out.println("Player turn East");
+      System.out.println("Player turns East");
       break;
       case EAST:
       this.orientation = orientation.SOUTH;
-      System.out.println("Player turn South");
+      System.out.println("Player turns South");
       break;
       case WEST:
       this.orientation = orientation.NORTH;
-      System.out.println("Player turn North");
+      System.out.println("Player turns North");
       break;
       case SOUTH:
       this.orientation = orientation.WEST;
-      System.out.println("Player turn West");
+      System.out.println("Player turns West");
       break;
     }
     return "true";
