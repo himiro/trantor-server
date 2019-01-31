@@ -3,3 +3,12 @@ FOR MYSQL DATABASE :
   Create database called "trantor"
   sudo mysql trantor < backup.sql
   Check if the tables are well formated and if they are not empty
+
+RUN:
+
+gradle run --args="-h"
+
+OU
+
+make
+java -jar dist/trantor-1.0.0.jar -h

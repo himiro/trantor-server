@@ -6,7 +6,7 @@ RM		=		rm -f
 
 all		:		$(NAME)
 
-$(NAME):
+$(NAME):			build
 					$(GRADLE) jar
 
 package:
