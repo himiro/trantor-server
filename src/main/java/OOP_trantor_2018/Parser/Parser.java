@@ -15,28 +15,40 @@ class Parser {
         int select2 = 0;
 
         for (int i = 0; i < args.length; i+=2) {
+            if (i + 1 >= args.length)
+            {
+                this.displayUsage();
+                System.exit(84);
+            }
+            boolean isInt = this.isNumeric(args[i+1]);
             switch (args[i]) {
                 case "-p" :
-                if (Integer.parseInt(args[i+1]) > 9999 || Integer.parseInt(args[i+1])== 0 )
+                if (isInt == true && (Integer.parseInt(args[i+1]) > 9999 || Integer.parseInt(args[i+1]) == 0))
                 setPort(4242);
-                else
+                else if (isInt == true)
                 setPort(Integer.parseInt(args[i+1]));
+                else
+                this.displayUsage();
                 break;
                 case "-x" :
-                if (Integer.parseInt(args[i+1]) >= 100)
+                if (isInt == true && (Integer.parseInt(args[i+1]) >= 100))
                 setX(100);
-                else if (Integer.parseInt(args[i+1]) == 0)
+                else if (isInt == true && (Integer.parseInt(args[i+1]) == 0))
                 setX(10);
-                else
+                else if (isInt == true)
                 setX(Integer.parseInt(args[i+1]));
+                else
+                this.displayUsage();
                 break;
                 case "-y" :
-                if (Integer.parseInt(args[i+1]) >= 100)
+                if (isInt == true && (Integer.parseInt(args[i+1]) >= 100))
                 setY(100);
-                else if (Integer.parseInt(args[i+1]) == 0)
+                else if (isInt == true && (Integer.parseInt(args[i+1]) == 0))
                 setX(10);
-                else
+                else if (isInt == true)
                 setY(Integer.parseInt(args[i+1]));
+                else
+                this.displayUsage();
                 break;
                 case "-n" :
                 if (i+2 == args.length)
@@ -52,22 +64,21 @@ class Parser {
                 }
                 break;
                 case "-c" :
-                if (Integer.parseInt(args[i+1]) >= 100)
+                if (isInt == true && (Integer.parseInt(args[i+1]) >= 100))
                 setNbClient(100);
-                else
+                else if (isInt == true)
                 setNbClient(Integer.parseInt(args[i+1]));
+                else
+                this.displayUsage();
                 break;
                 case "-f" :
+                if (isInt == true)
                 setFreq(Integer.parseInt(args[i+1]));
+                else
+                this.displayUsage();
                 break;
                 default :
-                System.out.println("USAGE: trantor.jar -p port -x width -y height -n name1 name2 -c clientsNb -f freq\n");
-                System.out.println("    port        is the port number");
-                System.out.println("    width       is the width of the world");
-                System.out.println("    height      is the height of the world");
-                System.out.println("    nameX       is the name of the team X");
-                System.out.println("    clientsNb   is the number of authorized clients per team");
-                System.out.println("    freq        is the reciprocal of time unit for execution of actions");
+                this.displayUsage();
                 System.exit(84);
             }
         }
@@ -171,5 +182,28 @@ class Parser {
     */
     public void setFreq(int freq) {
         this.freq = freq;
+    }
+
+    public void displayUsage()
+    {
+        System.out.println("USAGE: trantor.jar -p port -x width -y height -n name1 name2 -c clientsNb -f freq\n");
+        System.out.println("    port        is the port number");
+        System.out.println("    width       is the width of the world");
+        System.out.println("    height      is the height of the world");
+        System.out.println("    nameX       is the name of the team X");
+        System.out.println("    clientsNb   is the number of authorized clients per team");
+        System.out.println("    freq        is the reciprocal of time unit for execution of actions");
+    }
+
+    public boolean isNumeric(String str)
+    {
+        for (int i = 0; i < str.length(); i++)
+        {
+            if (str.charAt(i) < '0' || str.charAt(i) > '9')
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }
